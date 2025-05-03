@@ -14,7 +14,7 @@ public class EmergencyContact {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // اسم العمود في جدول EmergencyContact الذي يربط بـ User
+    @JoinColumn(name = "user_id") //  the name of column in table EmergencyContact that link the User
     @JsonBackReference
     private User user;
 

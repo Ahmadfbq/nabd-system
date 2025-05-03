@@ -13,7 +13,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // من الأفضل استخدام Long للمعرفات في قواعد البيانات
+    private Long id; // its better to use Long for ids in DB
     private String name;
     private String email;
     private String phone;

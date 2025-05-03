@@ -17,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // جلب جميع المستخدمين
+    // get all users
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getUsers();
@@ -49,7 +49,7 @@ public class UserController {
         //return userService.saveUser(user);
    // }
 
-    // حذف مستخدم بواسطة المعرف
+    // delete user by id
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

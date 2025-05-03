@@ -45,29 +45,28 @@ public class UserService {
             existingUser.setPassword(updatedUser.getPassword());
             existingUser.setEmergencyEnabled(updatedUser.getEmergencyEnabled());
 
-            // -------- تحديث جهات الاتصال --------
+            // -------- updates contacts --------
             List<EmergencyContact> updatedContacts = updatedUser.getEmergencyContacts();
 
-            // 1. تعديل الموجودين
+            // 1. edit exists one
             for (EmergencyContact updatedContact : updatedContacts) {
                 boolean found = false;
                 for (EmergencyContact existingContact : existingUser.getEmergencyContacts()) {
                     if (updatedContact.getId() != null && updatedContact.getId().equals(existingContact.getId())) {
-                        // تحديث البيانات
+                        // update info
                         existingContact.setName(updatedContact.getName());
                         existingContact.setPhone(updatedContact.getPhone());
                         found = true;
                         break;
                     }
                 }
-                // 2. لو ما وجد، نضيفه جديد
+                // 2. if not exist , add it
                 if (!found) {
-                    updatedContact.setUser(existingUser); // ربطه بالـ user
+                    updatedContact.setUser(existingUser); // link it with user
                     existingUser.getEmergencyContacts().add(updatedContact);
                 }
             }
 
-            // 3. يمكن إضافة خطوة حذف الـ contacts التي لم تعد موجودة لو حبيت (اختياري)
 
             return userRepository.save(existingUser);
         }).orElseThrow(() -> new RuntimeException("User not found"));
