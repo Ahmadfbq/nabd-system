@@ -1,0 +1,19 @@
+services:
+  db:
+    container_name: postgres-IoT
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: IotUser
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres  # الإشارة إلى وحدة التخزين المسماة 'db'
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+volumes:
+  db:  # تعريف وحدة التخزين المسماة 'db' في المستوى الأعلى
+networks:
+  db:

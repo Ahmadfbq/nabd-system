@@ -1,0 +1,67 @@
+### GET request to example server
+GET localhost:8080
+
+###
+GET localhost:8080/api/v1/users
+
+
+###
+POST localhost:8080/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "nasser",
+  "email": "bashar@example.com",
+  "phone": "0551234567",
+  "height": 175,
+  "weight": 75,
+  "password": "MySecretPassword123",
+  "emergencyEnabled": true,
+  "emergencyContacts": [
+    {
+      "name": "Ali Friend",
+      "phone": "0559998888"
+    },
+    {
+      "name": "Sara Sister",
+      "phone": "0557776666"
+    }
+  ]
+}
+
+
+###
+// return user by id
+GET localhost:8080/api/v1/users/1
+
+
+
+###
+// delete user by id
+DELETE localhost:8080/api/v1/users/4
+
+###
+// update user by id
+PUT localhost:8080/api/v1/users/1
+Content-Type: application/json
+
+{
+  "name": "Bashar upldate 1",
+  "email": "bashar@etmaam.com.sa",
+  "phone": "0500061559",
+  "height": 180,
+  "weight": 78,
+  "password": "NewPassword123",
+  "emergencyEnabled": false,
+  "emergencyContacts": [
+    {
+      "id": 1,
+      "name": "update ali",
+      "phone": "0559991111"
+    },
+    {
+      "name": "fourth one new",
+      "phone": "0500000000"
+    }
+  ]
+}
