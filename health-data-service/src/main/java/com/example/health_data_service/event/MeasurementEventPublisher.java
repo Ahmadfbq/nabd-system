@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class MeasurementEventPublisher {
-    
+
     private final RestTemplate restTemplate;
     private static final String ANALYSIS_SERVICE_URL = "http://localhost:8082/api/analysis";
 

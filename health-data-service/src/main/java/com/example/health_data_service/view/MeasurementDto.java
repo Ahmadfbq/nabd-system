@@ -3,7 +3,7 @@ package com.example.health_data_service.view;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder
+@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
 public class MeasurementDto {
     private int deviceId;
     private double temperature;

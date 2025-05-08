@@ -1,9 +1,33 @@
+version: '3.8'
+
+volumes:
+  db: # Defines a named volume 'db' for persistent storage of PostgreSQL data
+
+networks:
+  db:
+
 services:
+  db:
+    container_name: postgres-IoT
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: IotUser
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
+
   nginx:
     image: nginx:latest
     container_name: nginx-gateway
@@ -23,6 +47,9 @@ services:
       - "8081:8081"
     depends_on:
       - rabbitmq
+    # If this service needs to connect to the database directly:
+    # networks:
+    #   - db
 
   analysis-service:
     build: ./analysis-service
@@ -30,6 +57,9 @@ services:
       - "8082:8082"
     depends_on:
       - rabbitmq
+    # If this service needs to connect to the database directly:
+    # networks:
+    #   - db
 
   notification-service:
     build: ./notification-service
@@ -37,6 +67,9 @@ services:
       - "8083:8083"
     depends_on:
       - rabbitmq
+    # If this service needs to connect to the database directly:
+    # networks:
+    #   - db
 
   health-data-service:
     build: ./health-data-service
@@ -44,11 +77,19 @@ services:
       - "8084:8084"
     depends_on:
       - rabbitmq
+    # If this service needs to connect to the database directly:
+    # networks:
+    #   - db
 
   spa-frontend:
     build: ./spa-frontend
-    commands: npm run build
+    # Consider building the frontend in the Dockerfile instead
+    # For development, this might be okay
+    # commands: npm run build
     volumes:
       - ./spa-frontend/dist:/usr/share/nginx/html:ro
     ports:
       - "5173:5173"  # default for Vite
+
+    #  docker compose up -d
+    #  docker compose ps

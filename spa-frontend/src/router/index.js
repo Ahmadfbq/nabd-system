@@ -8,41 +8,25 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'welcome',
-      component: () => import('../App.vue')
+      name: 'home',
+      component: HomeView,
     },
     {
-      path: '/auth',
-      name: 'auth',
-      component: AuthView,
-      children: [
-        {
-          path: '',  // Default child route
-          redirect: 'login'
-        },
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import('../components/auth/LoginForm.vue')
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: () => import('../components/auth/RegisterForm.vue')
-        }
-      ]
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/AuthView.vue'),
     },
     {
       path: '/home',
       name: 'home',
-      component: HomeView
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
-    }
-  ]
+      component: () => import('../views/ProfileView.vue'),
+    },
+  ],
 })
 
 export default router

@@ -26,7 +26,8 @@ public class MeasurementCommandServiceImpl implements MeasurementCommandService 
     public void saveMeasurement(MeasurementDto dto) {
         Measurement measurement = mapper.toEntity(dto);
         repository.save(measurement);
-        eventPublisher.publishMeasurementCreated(measurement);
+        MeasurementDto measurementDto = mapper.toDto(measurement); // Convert to DTO
+        eventPublisher.publishMeasurement(measurementDto);
     }
 
 }
