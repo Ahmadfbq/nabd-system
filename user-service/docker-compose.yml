@@ -1,0 +1,19 @@
+services:
+  db:
+    container_name: postgres-IoT
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: IotUser
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres # Mounts the named volume 'db' to the PostgreSQL data directory inside the container
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+volumes:
+  db: # Defines a named volume 'db' for persistent storage of PostgreSQL data
+networks:
+  db:
