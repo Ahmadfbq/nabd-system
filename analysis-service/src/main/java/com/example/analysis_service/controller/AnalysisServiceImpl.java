@@ -5,7 +5,11 @@ import com.example.analysis_service.model.AnalysisMapper;
 import com.example.analysis_service.model.Analysis;
 import com.example.analysis_service.model.AnalysisRepository;
 import com.example.analysis_service.controller.AnalysisService;
+<<<<<<< HEAD
 import lombok.*;
+=======
+import lombok.RequiredArgsConstructor;
+>>>>>>> origin/main
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import static java.util.stream.Collectors.*;
@@ -33,7 +37,11 @@ public class AnalysisServiceImpl implements AnalysisService {
         return mapper.toDto(saved);
     }
 
+<<<<<<< HEAD
     public void checkForDanger(Analysis a) {
+=======
+    private void checkForDanger(Analysis a) {
+>>>>>>> origin/main
         float score = 0f;
         for (var m : a.getMeasurements()) {
             switch (m.getType()) {
@@ -59,7 +67,11 @@ public class AnalysisServiceImpl implements AnalysisService {
         a.setResult(a.isDanger() ? "Danger detected" : "No danger");
     }
 
+<<<<<<< HEAD
     public void detectIllness(Analysis a) {
+=======
+    private void detectIllness(Analysis a) {
+>>>>>>> origin/main
         boolean diabetes = a.getMeasurements().stream()
             .filter(m -> m.getType().equals("bloodSugar"))
             .allMatch(m -> m.getValue() >= 126);
