@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
-public class Alert {
+public class Notification {
     @Id//primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
