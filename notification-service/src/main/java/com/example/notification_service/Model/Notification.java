@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 public class Notification {
     @Id//primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;//primary key
 
     private long userID;
     private String message;
     private LocalDateTime timestamp;
-    private enum alertType{}; //add what type of alert it is
+    private String alertType;
 
 }

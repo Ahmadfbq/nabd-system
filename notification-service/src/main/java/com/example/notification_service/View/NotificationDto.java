@@ -9,5 +9,5 @@ public class NotificationDto {
     private long userID; // Foreign key from User
     private String message;
     private LocalDateTime timestamp;
-    private String NotificationType;
+    private String alertType; //empty for now
 }
