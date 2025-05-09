@@ -1,15 +1,58 @@
 import api from './api';
 
-export default {
-  getHealthData() {
-    return api.get('/health_data/');
+export const healthDataService = {
+  // Get health measurements
+  async getMeasurements(timeRange = 'week') {
+    try {
+      const response = await api.get(`/health_data/?timeRange=${timeRange}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching health measurements:', error);
+      throw error;
+    }
   },
-  
-  submitNewHealthData(data) {
-    return api.post('/health_data/', data);
+
+  // Get latest measurements
+  async getLatestMeasurements() {
+    try {
+      const response = await api.get('/health_data/latest');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching latest measurements:', error);
+      throw error;
+    }
   },
-  
-  getHealthDataHistory() {
-    return api.get('/health_data/history');
+
+  // Get health insights
+  async getHealthInsights() {
+    try {
+      const response = await api.get('/health_data/insights');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching health insights:', error);
+      throw error;
+    }
+  },
+
+  // Add new measurement
+  async addMeasurement(measurement) {
+    try {
+      const response = await api.post('/health_data/', measurement);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding measurement:', error);
+      throw error;
+    }
+  },
+
+  // Get measurement statistics
+  async getStatistics(timeRange = 'week') {
+    try {
+      const response = await api.get(`/health_data/statistics?timeRange=${timeRange}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching statistics:', error);
+      throw error;
+    }
   }
 };

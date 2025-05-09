@@ -25,15 +25,23 @@ public class DatabaseConfig {
 
     @Primary
     @Bean(name = "commandDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.command")
     public DataSource commandDataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create()
+            .url("jdbc:postgresql://localhost:5332/HealthDataService")
+            .username("HealthUser")
+            .password("password")
+            .driverClassName("org.postgresql.Driver")
+            .build();
     }
 
     @Bean(name = "queryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.query")
     public DataSource queryDataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create()
+            .url("jdbc:postgresql://localhost:5332/HealthDataService")
+            .username("HealthUser")
+            .password("password")
+            .driverClassName("org.postgresql.Driver")
+            .build();
     }
 
     @Primary
@@ -47,7 +55,7 @@ public class DatabaseConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.hbm2ddl.auto", "update");
         em.setJpaPropertyMap(properties);
         
@@ -64,7 +72,7 @@ public class DatabaseConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.hbm2ddl.auto", "update");
         em.setJpaPropertyMap(properties);
         
