@@ -1,4 +1,4 @@
-package com.example.health_data_service.view;
+package com.example.analysis_service.view;
 
 import lombok.*;
 import java.time.LocalDateTime;
