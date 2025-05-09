@@ -27,8 +27,8 @@ public class DatabaseConfig {
     @Bean(name = "commandDataSource")
     public DataSource commandDataSource() {
         return DataSourceBuilder.create()
-            .url("jdbc:postgresql://localhost:5332/HealthDataService")
-            .username("HealthUser")
+            .url("jdbc:postgresql://localhost:5332/postgres")
+            .username("IotUser")
             .password("password")
             .driverClassName("org.postgresql.Driver")
             .build();
@@ -37,8 +37,8 @@ public class DatabaseConfig {
     @Bean(name = "queryDataSource")
     public DataSource queryDataSource() {
         return DataSourceBuilder.create()
-            .url("jdbc:postgresql://localhost:5332/HealthDataService")
-            .username("HealthUser")
+            .url("jdbc:postgresql://localhost:5332/postgres")
+            .username("IotUser")
             .password("password")
             .driverClassName("org.postgresql.Driver")
             .build();
