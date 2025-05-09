@@ -30,16 +30,17 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx-gateway
-    ports:
-      - "8080:80" # frontend will talk to this
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./spa-frontend/dist:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
     depends_on:
       - user-service
       - analysis-service
       - notification-service
       - health-data-service
+    restart: always
 
   user-service:
     build: ./user-service

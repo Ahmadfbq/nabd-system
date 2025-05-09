@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import  { Dashboard } from './components/Dashboard.vue';
 
 const route = useRoute()
 const isWelcomePage = computed(() => route.path === '/')
@@ -44,6 +45,7 @@ const isWelcomePage = computed(() => route.path === '/')
         </p>
       </div>
 
+      <Dashboard />
       <!-- Features preview -->
       <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
         <div class="text-center p-4 rounded-xl bg-gray-50">
