@@ -27,6 +27,7 @@ public class ApplicationConfig {
     @Bean
     @Primary
     public UserDetailsService userDetailsService() {
+        System.out.println("Authenticating: ");
         return username -> repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
