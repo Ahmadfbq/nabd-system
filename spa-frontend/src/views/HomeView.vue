@@ -46,7 +46,7 @@ const isMenuOpen = ref(false)
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Top Navigation -->
-    <nav class="bg-white shadow-sm">
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -94,19 +94,18 @@ const isMenuOpen = ref(false)
       </div>
 
       <!-- Dashboard Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Health Data Section -->
         <div class="lg:col-span-2">
           <HealthSection ref="healthSectionRef" />
         </div>
 
-        <!-- Sleep Pattern Section -->
-        <div>
+        <!-- Right Column -->
+        <div class="space-y-6">
+          <!-- Sleep Pattern Section -->
           <SleepSection ref="sleepSectionRef" />
-        </div>
-
-        <!-- Notifications Section -->
-        <div>
+          
+          <!-- Notifications Section -->
           <NotificationsSection ref="notificationsSectionRef" />
         </div>
       </div>
@@ -119,7 +118,7 @@ const isMenuOpen = ref(false)
       @click="isMenuOpen = false"
     >
       <div 
-        class="absolute right-0 top-0 h-full w-64 bg-white shadow-xl p-6"
+        class="absolute right-0 top-0 h-full w-80 bg-white shadow-xl p-6"
         @click.stop
       >
         <div class="flex justify-between items-center mb-6">
