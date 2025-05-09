@@ -1,16 +1,20 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import analysisService from '@/services/analysisService'
 
 const selectedDay = ref(null)
-const sleepWeek = ref([
-  { day: 'Sun', fullDay: 'Sunday', date: '2024-03-17', duration: 7.5, quality: 'Good', restful: true, deepSleep: '2h 15m', lightSleep: '4h 45m', remSleep: '30m' },
-  { day: 'Mon', fullDay: 'Monday', date: '2024-03-18', duration: 6, quality: 'Average', restful: false, deepSleep: '1h 30m', lightSleep: '3h 45m', remSleep: '45m' },
-  { day: 'Tue', fullDay: 'Tuesday', date: '2024-03-19', duration: 8, quality: 'Excellent', restful: true, deepSleep: '2h 30m', lightSleep: '4h 30m', remSleep: '1h' },
-  { day: 'Wed', fullDay: 'Wednesday', date: '2024-03-20', duration: 5.5, quality: 'Poor', restful: false, deepSleep: '1h 15m', lightSleep: '3h 30m', remSleep: '45m' },
-  { day: 'Thu', fullDay: 'Thursday', date: '2024-03-21', duration: 7, quality: 'Good', restful: true, deepSleep: '2h', lightSleep: '4h', remSleep: '1h' },
-  { day: 'Fri', fullDay: 'Friday', date: '2024-03-22', duration: 6.5, quality: 'Good', restful: true, deepSleep: '1h 45m', lightSleep: '4h', remSleep: '45m' },
-  { day: 'Sat', fullDay: 'Saturday', date: '2024-03-23', duration: 8.5, quality: 'Excellent', restful: true, deepSleep: '2h 45m', lightSleep: '4h 45m', remSleep: '1h' },
-])
+const sleepWeek = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await analysisService.getAnalysisResults();
+    if (response.data) {
+      sleepWeek.value = response.data;
+    }
+  } catch (error) {
+    console.error('Error fetching sleep data:', error);
+  }
+});
 
 const getQualityColor = (quality) => {
   const colors = {
@@ -32,39 +36,28 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
-const generateSleepData = () => {
-  const now = new Date()
-  const yesterday = new Date(now.getTime() - (24 * 60 * 60 * 1000))
-  
-  // Generate random sleep data for yesterday
-  const duration = (6 + Math.random() * 3).toFixed(1) // 6-9 hours
-  const deepSleep = Math.floor(1 + Math.random() * 2) // 1-3 hours
-  const lightSleep = Math.floor(3 + Math.random() * 2) // 3-5 hours
-  const remSleep = Math.floor(0.5 + Math.random() * 1) // 0.5-1.5 hours
-  
-  // Determine quality based on duration and deep sleep
-  let quality = 'Average'
-  if (duration >= 7.5 && deepSleep >= 2) quality = 'Excellent'
-  else if (duration >= 7 && deepSleep >= 1.5) quality = 'Good'
-  else if (duration < 6) quality = 'Poor'
-  
-  const newSleepData = {
-    day: yesterday.toLocaleDateString('en-US', { weekday: 'short' }),
-    fullDay: yesterday.toLocaleDateString('en-US', { weekday: 'long' }),
-    date: yesterday.toISOString().split('T')[0],
-    duration: parseFloat(duration),
-    quality,
-    restful: quality !== 'Poor',
-    deepSleep: `${deepSleep}h ${Math.floor(Math.random() * 60)}m`,
-    lightSleep: `${lightSleep}h ${Math.floor(Math.random() * 60)}m`,
-    remSleep: `${remSleep}h ${Math.floor(Math.random() * 60)}m`
+const generateSleepData = async () => {
+  try {
+    const mockData = {
+      day: new Date().toLocaleDateString('en-US', { weekday: 'short' }),
+      fullDay: new Date().toLocaleDateString('en-US', { weekday: 'long' }),
+      date: new Date().toISOString().split('T')[0],
+      duration: 7.5,
+      quality: 'Good',
+      restful: true,
+      deepSleep: '2h 15m',
+      lightSleep: '4h 45m',
+      remSleep: '30m'
+    };
+    await analysisService.requestAnalysis(mockData);
+    const response = await analysisService.getAnalysisResults();
+    if (response.data) {
+      sleepWeek.value = response.data;
+    }
+  } catch (error) {
+    console.error('Error recording sleep data:', error);
   }
-  
-  // Update the sleep week data
-  sleepWeek.value = [newSleepData, ...sleepWeek.value.slice(0, 6)]
-  
-  return newSleepData
-}
+};
 
 // Expose the generate function to parent component
 defineExpose({

@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import healthDataService from '@/services/healthDataService'
 
 const selected = ref('All')
 const types = ['All', 'Heart Rate', 'Oxygen', 'Blood Pressure', 'Blood Sugar', 'Temperature']
@@ -14,70 +15,37 @@ const healthData = ref({
   temperature: null
 })
 
-// Generate realistic health data for the last 10 hours
-const generateHealthData = () => {
-  const now = new Date()
-  const tenHoursAgo = new Date(now.getTime() - (10 * 60 * 60 * 1000))
-  
-  // Heart Rate (every second, but we'll store every minute for performance)
-  const heartRateData = []
-  for (let time = tenHoursAgo; time <= now; time = new Date(time.getTime() + 60000)) {
-    heartRateData.push({
-      timestamp: time,
-      value: Math.floor(60 + Math.random() * 40), // 60-100 bpm
-      status: 'normal'
-    })
+onMounted(async () => {
+  try {
+    const response = await healthDataService.getHealthData();
+    if (response.data) {
+      healthData.value = response.data;
+      hasData.value = true;
+    }
+  } catch (error) {
+    console.error('Error fetching health data:', error);
   }
-  
-  // Oxygen (every 30 seconds, stored every 5 minutes)
-  const oxygenData = []
-  for (let time = tenHoursAgo; time <= now; time = new Date(time.getTime() + 300000)) {
-    oxygenData.push({
-      timestamp: time,
-      value: (95 + Math.random() * 3).toFixed(1), // 95-98%
-      status: 'excellent'
-    })
+});
+
+const generateHealthData = async () => {
+  try {
+    const mockData = {
+      heartRate: [{ timestamp: new Date(), value: 75, status: 'normal' }],
+      oxygen: [{ timestamp: new Date(), value: 97, status: 'excellent' }],
+      bloodPressure: [{ timestamp: new Date(), value: '120/80', status: 'normal' }],
+      bloodSugar: [{ timestamp: new Date(), value: 100, status: 'normal' }],
+      temperature: { timestamp: new Date(), value: 36.8, status: 'normal' }
+    };
+    await healthDataService.submitNewHealthData(mockData);
+    const response = await healthDataService.getHealthData();
+    if (response.data) {
+      healthData.value = response.data;
+      hasData.value = true;
+    }
+  } catch (error) {
+    console.error('Error syncing health data:', error);
   }
-  
-  // Blood Pressure (every minute, stored every 15 minutes)
-  const bloodPressureData = []
-  for (let time = tenHoursAgo; time <= now; time = new Date(time.getTime() + 900000)) {
-    const systolic = Math.floor(110 + Math.random() * 20) // 110-130
-    const diastolic = Math.floor(70 + Math.random() * 10) // 70-80
-    bloodPressureData.push({
-      timestamp: time,
-      value: `${systolic}/${diastolic}`,
-      status: 'normal'
-    })
-  }
-  
-  // Blood Sugar (every 5 minutes)
-  const bloodSugarData = []
-  for (let time = tenHoursAgo; time <= now; time = new Date(time.getTime() + 300000)) {
-    bloodSugarData.push({
-      timestamp: time,
-      value: Math.floor(80 + Math.random() * 40), // 80-120 mg/dL
-      status: 'normal'
-    })
-  }
-  
-  // Temperature (once per day)
-  const temperatureData = {
-    timestamp: new Date(now.getTime() - (8 * 60 * 60 * 1000)), // 8 hours ago (during sleep)
-    value: (36.5 + Math.random() * 0.5).toFixed(1), // 36.5-37.0°C
-    status: 'normal'
-  }
-  
-  healthData.value = {
-    heartRate: heartRateData,
-    oxygen: oxygenData,
-    bloodPressure: bloodPressureData,
-    bloodSugar: bloodSugarData,
-    temperature: temperatureData
-  }
-  
-  hasData.value = true
-}
+};
 
 const getStatusColor = (status) => {
   const colors = {

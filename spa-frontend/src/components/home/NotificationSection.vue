@@ -1,56 +1,23 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import notificationService from '@/services/notificationService'
 
 const router = useRouter()
 const selectedNotification = ref(null)
 
-const notifications = ref([
-  {
-    id: 1,
-    type: 'alert',
-    message: 'Heart rate alert: above normal at 3:10 PM',
-    timestamp: '2 hours ago',
-    icon: '❤️',
-    read: false,
-    details: 'Your heart rate was 120 bpm, which is above your normal range of 60-100 bpm.',
-    action: 'View Details',
-    route: '/health'
-  },
-  {
-    id: 2,
-    type: 'info',
-    message: 'New sleep record received',
-    timestamp: '4 hours ago',
-    icon: '😴',
-    read: true,
-    details: 'You slept for 7.5 hours with good quality sleep. Deep sleep: 2h 15m, REM: 1h.',
-    action: 'View Sleep Analysis',
-    route: '/sleep'
-  },
-  {
-    id: 3,
-    type: 'success',
-    message: 'Device paired successfully',
-    timestamp: 'Yesterday',
-    icon: '📱',
-    read: true,
-    details: 'Your smart watch has been successfully connected and is now syncing data.',
-    action: 'Check Device Status',
-    route: '/device'
-  },
-  {
-    id: 4,
-    type: 'warning',
-    message: 'Low battery on your device',
-    timestamp: 'Yesterday',
-    icon: '🔋',
-    read: false,
-    details: 'Your device battery is at 15%. Please charge it to ensure continuous monitoring.',
-    action: 'View Battery Status',
-    route: '/device'
+const notifications = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await notificationService.getNotifications();
+    if (response.data) {
+      notifications.value = response.data;
+    }
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
   }
-])
+});
 
 const getTypeColor = (type) => {
   const colors = {
@@ -72,36 +39,50 @@ const getTypeIcon = (type) => {
   return icons[type] || icons.info
 }
 
-const markAllAsRead = () => {
-  notifications.value = notifications.value.map(notification => ({
-    ...notification,
-    read: true
-  }))
-}
+const markAllAsRead = async () => {
+  try {
+    await Promise.all(notifications.value.map(notification => 
+      notificationService.markAsRead(notification.id)
+    ));
+    notifications.value = notifications.value.map(notification => ({
+      ...notification,
+      read: true
+    }));
+  } catch (error) {
+    console.error('Error marking notifications as read:', error);
+  }
+};
 
 const unreadCount = computed(() => {
   return notifications.value.filter(n => !n.read).length
 })
 
-const handleAction = (notification) => {
-  // Mark as read when viewing details
-  notifications.value = notifications.value.map(n => 
-    n.id === notification.id ? { ...n, read: true } : n
-  )
-  selectedNotification.value = notification
-}
+const handleAction = async (notification) => {
+  try {
+    await notificationService.markAsRead(notification.id);
+    notifications.value = notifications.value.map(n => 
+      n.id === notification.id ? { ...n, read: true } : n
+    );
+    selectedNotification.value = notification;
+  } catch (error) {
+    console.error('Error marking notification as read:', error);
+  }
+};
 
 const viewAllNotifications = () => {
   router.push('/notifications')
 }
 
-const addNotification = (notification) => {
-  const newId = Math.max(...notifications.value.map(n => n.id), 0) + 1
-  notifications.value = [{
-    id: newId,
-    ...notification
-  }, ...notifications.value]
-}
+const addNotification = async (notification) => {
+  try {
+    const response = await notificationService.updateNotificationSettings(notification);
+    if (response.data) {
+      notifications.value = [response.data, ...notifications.value];
+    }
+  } catch (error) {
+    console.error('Error adding notification:', error);
+  }
+};
 
 // Expose the addNotification function to parent component
 defineExpose({
