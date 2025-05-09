@@ -1,4 +1,16 @@
-@import './base.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input-style {
+    @apply w-full p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8FBC8B];
+  }
+
+  .btn-primary {
+    @apply bg-[#8FBC8B] text-white font-semibold py-2 px-4 rounded-xl hover:bg-green-600 transition;
+  }
+}
 
 #app {
   max-width: 1280px;
@@ -7,17 +19,15 @@
   font-weight: normal;
 }
 
-a,
-.green {
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: #8FBC8B;
   transition: 0.4s;
-  padding: 3px;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: rgba(143, 188, 139, 0.2);
   }
 }
 
