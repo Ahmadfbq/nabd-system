@@ -22,7 +22,8 @@ public class Analysis {
     private List<Measurement> measurements = new ArrayList<>();
 
     private String result;
-    private boolean isDanger;
+    // Rename to avoid potential issues with JPA/Jackson serialization
+    private boolean danger;  // Changed from isDanger
     private float abnormalityScore;
     private String illnessPrediction;
     private String description;

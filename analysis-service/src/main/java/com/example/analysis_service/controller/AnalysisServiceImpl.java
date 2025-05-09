@@ -4,24 +4,38 @@ import com.example.analysis_service.view.AnalysisDto;
 import com.example.analysis_service.model.AnalysisMapper;
 import com.example.analysis_service.model.Analysis;
 import com.example.analysis_service.model.AnalysisRepository;
-import com.example.analysis_service.controller.AnalysisService;
 import com.example.health_data_service.model.Measurement;
-import lombok.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import static java.util.stream.Collectors.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AnalysisServiceImpl implements AnalysisService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AnalysisServiceImpl.class);
+    
+    // Health thresholds that could be moved to configuration
+    private static final int MIN_HEART_RATE = 60;
+    private static final int MAX_HEART_RATE = 100;
+    private static final int MIN_OXYGEN_LEVEL = 95;
+    private static final int HIGH_BLOOD_PRESSURE = 130;
+    private static final int HIGH_BLOOD_SUGAR = 126;
+    private static final float HIGH_TEMPERATURE = 38.0f;
 
     private final AnalysisRepository repository;
     private final AnalysisMapper mapper;
 
     @Override
     public AnalysisDto analyze(AnalysisDto dto) {
+        if (dto == null) {
+            logger.error("Cannot analyze null DTO");
+            throw new IllegalArgumentException("Analysis DTO cannot be null");
+        }
+        
         // populate timestamp
         dto.setTimestamp(LocalDateTime.now());
         Analysis entity = mapper.toEntity(dto);
@@ -30,36 +44,46 @@ public class AnalysisServiceImpl implements AnalysisService {
         checkForDanger(entity);
         detectIllness(entity);
 
-        // persist
-        Analysis saved = repository.save(entity);
-        return mapper.toDto(saved);
+        try {
+            // persist
+            Analysis saved = repository.save(entity);
+            return mapper.toDto(saved);
+        } catch (Exception e) {
+            logger.error("Error saving analysis", e);
+            throw new RuntimeException("Failed to save analysis", e);
+        }
     }
 
     public void checkForDanger(Analysis a) {
+        if (a == null || a.getMeasurements() == null || a.getMeasurements().isEmpty()) {
+            logger.warn("No measurements available for danger check");
+            return;
+        }
+        
         float score = 0f;
         for (Measurement m : a.getMeasurements()) {
             // Check heart rate
-            if (m.getHeartRate() < 60 || m.getHeartRate() > 100) {
+            if (m.getHeartRate() < MIN_HEART_RATE || m.getHeartRate() > MAX_HEART_RATE) {
                 score++;
             }
             
             // Check oxygen level
-            if (m.getOxygenLevel() < 95) {
+            if (m.getOxygenLevel() < MIN_OXYGEN_LEVEL) {
                 score++;
             }
             
             // Check blood pressure
-            if (m.getBloodPressure() >= 130) {
+            if (m.getBloodPressure() >= HIGH_BLOOD_PRESSURE) {
                 score++;
             }
             
             // Check blood sugar
-            if (m.getBloodSugar() >= 126) {
+            if (m.getBloodSugar() >= HIGH_BLOOD_SUGAR) {
                 score++;
             }
             
             // Check temperature
-            if (m.getTemperature() > 38) {
+            if (m.getTemperature() > HIGH_TEMPERATURE) {
                 score++;
             }
         }
@@ -69,19 +93,28 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     public void detectIllness(Analysis a) {
-        boolean diabetes = a.getMeasurements().stream()
-                .allMatch(m -> m.getBloodSugar() >= 126);
+        if (a == null || a.getMeasurements() == null || a.getMeasurements().isEmpty()) {
+            logger.warn("No measurements available for illness detection");
+            return;
+        }
+        
+        List<Measurement> measurements = a.getMeasurements();
+        
+        // More lenient check - consider risk if any measurement exceeds threshold
+        boolean diabetesRisk = measurements.stream()
+                .anyMatch(m -> m.getBloodSugar() >= HIGH_BLOOD_SUGAR);
 
-        boolean hypertension = a.getMeasurements().stream()
-                .allMatch(m -> m.getBloodPressure() >= 130);
+        boolean hypertensionRisk = measurements.stream()
+                .anyMatch(m -> m.getBloodPressure() >= HIGH_BLOOD_PRESSURE);
 
-        boolean fever = a.getMeasurements().stream()
-                .anyMatch(m -> m.getTemperature() > 38 && m.getTimestamp().isAfter(LocalDateTime.now().minusHours(2)));
+        boolean fever = measurements.stream()
+                .anyMatch(m -> m.getTemperature() > HIGH_TEMPERATURE && 
+                              m.getTimestamp().isAfter(LocalDateTime.now().minusHours(2)));
 
         String prediction;
-        if (diabetes) {
+        if (diabetesRisk) {
             prediction = "Diabetes risk";
-        } else if (hypertension) {
+        } else if (hypertensionRisk) {
             prediction = "Hypertension risk";
         } else if (fever) {
             prediction = "Fever detected";

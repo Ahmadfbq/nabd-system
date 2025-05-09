@@ -13,7 +13,7 @@ public class AnalysisMapper {
             .timestamp(dto.getTimestamp())
             .measurements(dto.getMeasurements())
             .result(dto.getResult())
-            .isDanger(dto.isDanger())
+            .danger(dto.isDanger())
             .abnormalityScore(dto.getAbnormalityScore())
             .illnessPrediction(dto.getIllnessPrediction())
             .description(dto.getDescription())
