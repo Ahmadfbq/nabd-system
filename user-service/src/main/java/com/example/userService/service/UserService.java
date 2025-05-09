@@ -13,13 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.userService.model.User;
 import com.example.userService.repository.UserRepository;
-import com.example.notification_service.view.NotificationDto;
+//import com.example.notification_service.view.NotificationDto;
 
 
 import java.security.Principal;
 import java.util.List;
 
-@Service
+@Service("userService")
 @RequiredArgsConstructor
 // @Transactional // يمكنك تفعيل إدارة المعاملات على مستوى الكلاس إذا لزم الأمر
 public class UserService implements UserDetailsService {
@@ -146,10 +146,10 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void updateUserHealthStatus(NotificationDto notification) {
-        User user = repository.findById(notification.getUserID())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setHealthStatus(notification.getMessage());
-        repository.save(user);
-    }
+//    public void updateUserHealthStatus(NotificationDto notification) {
+//        User user = repository.findById(notification.getUserID())
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        user.setHealthStatus(notification.getMessage());
+//        repository.save(user);
+//    }
 }

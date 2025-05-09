@@ -11,10 +11,10 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>user-service</module>
     <module>analysis-service</module>
-    <module>notification-service</module>
     <module>health-data-service</module>
+    <module>user-service</module>
+    <module>notification-service</module>
   </modules>
 
   <properties>
