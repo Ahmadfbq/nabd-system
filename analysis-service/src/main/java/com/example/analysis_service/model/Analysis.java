@@ -27,5 +27,7 @@ public class Analysis {
     private float abnormalityScore;
     private String illnessPrediction;
     private String description;
+
+
 }
 

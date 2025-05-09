@@ -86,7 +86,7 @@ services:
     build: ./spa-frontend
     # Consider building the frontend in the Dockerfile instead
     # For development, this might be okay
-    # commands: npm run build
+    command: npm run build
     volumes:
       - ./spa-frontend/dist:/usr/share/nginx/html:ro
     ports:
@@ -94,3 +94,7 @@ services:
 
     #  docker compose up -d
     #  docker compose ps
+
+
+  # gpt
+  #docker-compose up --build
