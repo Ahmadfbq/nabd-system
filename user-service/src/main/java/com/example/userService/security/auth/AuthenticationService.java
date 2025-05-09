@@ -1,6 +1,5 @@
 package com.example.userService.security.auth;
 
-import com.example.userService.model.AuthenticationRequest;
 import com.example.userService.model.RegisterRequest;
 import com.example.userService.security.config.JwtService;
 import com.example.userService.security.token.Token;

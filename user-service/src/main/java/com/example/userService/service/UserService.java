@@ -1,10 +1,8 @@
 package com.example.userService.service;
 
 
-import com.example.userService.model.ChangePasswordRequest;
+import com.example.userService.security.auth.ChangePasswordRequest;
 import com.example.userService.model.EmergencyContact; // تأكد من استيراد الكلاس الصحيح إذا كان في حزمة مختلفة
-import com.example.notification_service.view.NotificationDto;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.userService.model.User;
 import com.example.userService.repository.UserRepository;
+import com.example.notification_service.view.NotificationDto;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -138,6 +138,13 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format(USER_NOT_FOUND, email)));
     }
+
+    public Long getUserIdByUsername(String email) {
+        return repository.findByEmail(email)
+                .map(user -> user.getId().longValue())
+                .orElseThrow(() -> new UsernameNotFoundException("لم يتم العثور على مستخدم بالبريد الإلكتروني: " + email));
+    }
+
 
     public void updateUserHealthStatus(NotificationDto notification) {
         User user = repository.findById(notification.getUserID())

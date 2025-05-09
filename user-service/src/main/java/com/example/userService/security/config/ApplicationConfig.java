@@ -1,7 +1,7 @@
 package com.example.userService.security.config;
 import com.example.userService.repository.UserRepository;
-//import com.userService.security.auditing.ApplicationAuditAware;
-//import com.userService.security.user.UserRepository;
+import com.example.userService.security.auditing.ApplicationAuditAware;
+import com.example.userService.repository.UserRepository;
 import com.example.userService.security.auditing.ApplicationAuditAware;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;

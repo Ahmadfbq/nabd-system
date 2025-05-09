@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class NotificationEventConsumer {
-    
+
     private final UserService userService;
     private static final String NOTIFICATION_QUEUE = "notification.queue";
 
@@ -18,4 +18,4 @@ public class NotificationEventConsumer {
         // Update user's health status based on notification
         userService.updateUserHealthStatus(notification);
     }
-} 
+}

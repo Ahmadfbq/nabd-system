@@ -16,7 +16,7 @@ public class userServiceApplication {
 	}
 
 	@GetMapping
-	public String helloWorld() {
+	public String	 helloWorld() {
 		return "Hello World Spring Boot Wonderful team";
 	}
 }

@@ -2,13 +2,19 @@ package com.example.userService.controller;
 
 import com.example.userService.model.User;
 import com.example.userService.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {
+
 
     private final UserService userService;
 
@@ -30,14 +36,20 @@ public class UserController {
         userService.saveUser(user);
     }
 
-    // FindById CRUD (R)
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUserIdentifier = authentication.getName();
+        Long loggedInUserId = userService.getUserIdByUsername(loggedInUserIdentifier);
+
+        if (!loggedInUserId.equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ليس لديك صلاحية للوصول إلى بيانات هذا المستخدم.");
+        }
         return userService.getUserById(id);
     }
 
 
-    // DELETE user by id
+    // DeleteById CRUD (D)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
@@ -46,8 +58,16 @@ public class UserController {
     // UPDATE  with id
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User updatedUser){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUserIdentifier = authentication.getName();
+        Long loggedInUserId = userService.getUserIdByUsername(loggedInUserIdentifier);
+
+        if (!loggedInUserId.equals(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this user..");
+        }
         return userService.updateUser(id, updatedUser);
     }
+
 
 
     //  method for creating a user with emergency contacts

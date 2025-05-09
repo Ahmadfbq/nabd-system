@@ -1,4 +1,4 @@
-package com.example.userService.model;
+package com.example.userService.security.auth;
 
 
 import lombok.Builder;

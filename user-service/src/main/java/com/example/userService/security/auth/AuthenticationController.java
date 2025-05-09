@@ -1,7 +1,6 @@
 package com.example.userService.security.auth;
 
 
-import com.example.userService.model.AuthenticationRequest;
 import com.example.userService.model.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
