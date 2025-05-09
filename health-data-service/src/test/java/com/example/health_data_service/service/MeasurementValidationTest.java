@@ -11,57 +11,48 @@ class MeasurementValidationTest {
     @Test
     void testValidHeartRate() {
         MeasurementDto dto = new MeasurementDto();
-        dto.setType("heartRate");
-        dto.setValue(75.0);
+        dto.setHeartRate(75);
         dto.setTimestamp(LocalDateTime.now());
 
-        assertTrue(isValidMeasurement(dto));
+        assertTrue(isValidHeartRate(dto));
     }
 
     @Test
     void testInvalidHeartRate() {
         MeasurementDto dto = new MeasurementDto();
-        dto.setType("heartRate");
-        dto.setValue(200.0); // Too high
+        dto.setHeartRate(200); // Too high
         dto.setTimestamp(LocalDateTime.now());
 
-        assertFalse(isValidMeasurement(dto));
+        assertFalse(isValidHeartRate(dto));
     }
 
     @Test
     void testValidBloodPressure() {
         MeasurementDto dto = new MeasurementDto();
-        dto.setType("bloodPressure");
-        dto.setValue(120.0);
+        dto.setBloodPressure(120);
         dto.setTimestamp(LocalDateTime.now());
 
-        assertTrue(isValidMeasurement(dto));
+        assertTrue(isValidBloodPressure(dto));
     }
 
     @Test
     void testInvalidBloodPressure() {
         MeasurementDto dto = new MeasurementDto();
-        dto.setType("bloodPressure");
-        dto.setValue(200.0); // Too high
+        dto.setBloodPressure(200); // Too high
         dto.setTimestamp(LocalDateTime.now());
 
-        assertFalse(isValidMeasurement(dto));
+        assertFalse(isValidBloodPressure(dto));
     }
 
-    private boolean isValidMeasurement(MeasurementDto dto) {
-        if (dto.getType() == null || dto.getValue() == null) {
-            return false;
-        }
+    private boolean isValidHeartRate(MeasurementDto dto) {
+        return dto.getHeartRate() >= 60 && dto.getHeartRate() <= 100;
+    }
 
-        switch (dto.getType()) {
-            case "heartRate":
-                return dto.getValue() >= 60 && dto.getValue() <= 100;
-            case "bloodPressure":
-                return dto.getValue() >= 90 && dto.getValue() <= 140;
-            case "oxygenLevel":
-                return dto.getValue() >= 95 && dto.getValue() <= 100;
-            default:
-                return false;
-        }
+    private boolean isValidBloodPressure(MeasurementDto dto) {
+        return dto.getBloodPressure() >= 90 && dto.getBloodPressure() <= 140;
+    }
+
+    private boolean isValidOxygenLevel(MeasurementDto dto) {
+        return dto.getOxygenLevel() >= 95 && dto.getOxygenLevel() <= 100;
     }
 } 

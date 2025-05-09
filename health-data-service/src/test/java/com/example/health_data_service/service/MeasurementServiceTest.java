@@ -3,6 +3,8 @@ package com.example.health_data_service.service;
 import com.example.health_data_service.model.Measurement;
 import com.example.health_data_service.model.MeasurementRepository;
 import com.example.health_data_service.view.MeasurementDto;
+import com.example.health_data_service.controller.MeasurementCommandService;
+import com.example.health_data_service.controller.MeasurementQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,7 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,59 +26,49 @@ public class MeasurementServiceTest {
     private MeasurementRepository measurementRepository;
 
     @InjectMocks
-    private MeasurementService measurementService;
+    private MeasurementCommandService commandService;
+    
+    @InjectMocks
+    private MeasurementQueryService queryService;
 
     @Test
-    void testCreateMeasurement() {
+    void testSaveMeasurement() {
         // Given
         MeasurementDto dto = new MeasurementDto();
-        dto.setType("heartRate");
-        dto.setValue(75.0);
+        dto.setDeviceId(1);
+        dto.setHeartRate(75);
         dto.setTimestamp(LocalDateTime.now());
 
         Measurement savedMeasurement = new Measurement();
         savedMeasurement.setId(1L);
-        savedMeasurement.setType(dto.getType());
-        savedMeasurement.setValue(dto.getValue());
+        savedMeasurement.setHeartRate(dto.getHeartRate());
         savedMeasurement.setTimestamp(dto.getTimestamp());
 
         when(measurementRepository.save(any(Measurement.class))).thenReturn(savedMeasurement);
 
         // When
-        MeasurementDto result = measurementService.createMeasurement(dto);
+        commandService.saveMeasurement(dto);
 
         // Then
-        assertNotNull(result);
-        assertEquals("heartRate", result.getType());
-        assertEquals(75.0, result.getValue());
+        verify(measurementRepository).save(any(Measurement.class));
     }
 
     @Test
-    void testGetMeasurement() {
+    void testGetAllMeasurements() {
         // Given
         Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setType("heartRate");
-        measurement.setValue(75.0);
+        measurement.setHeartRate(75);
         measurement.setTimestamp(LocalDateTime.now());
 
-        when(measurementRepository.findById(1L)).thenReturn(Optional.of(measurement));
+        when(measurementRepository.findAll()).thenReturn(Arrays.asList(measurement));
 
         // When
-        MeasurementDto result = measurementService.getMeasurement(1L);
+        List<MeasurementDto> results = queryService.getAllMeasurements();
 
         // Then
-        assertNotNull(result);
-        assertEquals("heartRate", result.getType());
-        assertEquals(75.0, result.getValue());
-    }
-
-    @Test
-    void testGetMeasurementNotFound() {
-        // Given
-        when(measurementRepository.findById(999L)).thenReturn(Optional.empty());
-
-        // When & Then
-        assertThrows(RuntimeException.class, () -> measurementService.getMeasurement(999L));
+        assertNotNull(results);
+        assertFalse(results.isEmpty());
+        assertEquals(75, results.get(0).getHeartRate());
     }
 } 
