@@ -1,4 +1,4 @@
-package com.example.notification_service.Controller;
+package com.example.notification_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.example.notification_service.Model;
+package com.example.notification_service.model;
 
-import com.example.notification_service.View.NotificationDto;
+import com.example.notification_service.view.NotificationDto;
 import org.springframework.stereotype.Component;
 
 @Component
