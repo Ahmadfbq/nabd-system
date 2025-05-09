@@ -1,10 +1,10 @@
-package com.example.IoT;
+package com.example.userService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class IoTApplicationTests {
+class userServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

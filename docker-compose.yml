@@ -7,13 +7,13 @@ services:
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
-      - db:/data/postgres  # الإشارة إلى وحدة التخزين المسماة 'db'
+      - db:/data/postgres # Mounts the named volume 'db' to the PostgreSQL data directory inside the container
     ports:
       - "5332:5432"
     networks:
       - db
     restart: unless-stopped
 volumes:
-  db:  # تعريف وحدة التخزين المسماة 'db' في المستوى الأعلى
+  db: # Defines a named volume 'db' for persistent storage of PostgreSQL data
 networks:
   db:

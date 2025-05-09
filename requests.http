@@ -1,17 +1,16 @@
-### GET request to example server
+### GET request to the root path of the server
 GET localhost:8080
 
-###
+### GET request to retrieve all users
 GET localhost:8080/api/v1/users
 
-
-###
+### POST request to add a new user
 POST localhost:8080/api/v1/users
 Content-Type: application/json
 
 {
   "name": "nasser",
-  "email": "bashar@example.com",
+  "email": "basha312r@example.com",
   "phone": "0551234567",
   "height": 175,
   "weight": 75,
@@ -29,30 +28,24 @@ Content-Type: application/json
   ]
 }
 
-
-###
-// return user by id
+### GET request to retrieve a user by ID
 GET localhost:8080/api/v1/users/1
 
-
-
-###
-// delete user by id
+### DELETE request to delete a user by ID
 DELETE localhost:8080/api/v1/users/4
 
-###
-// update user by id
+### PUT request to update a user by ID
 PUT localhost:8080/api/v1/users/1
 Content-Type: application/json
 
 {
   "name": "Bashar upldate 1",
-  "email": "bashar@etmaam.com.sa",
+  "email": "basha444@retmaam.com.sa",
   "phone": "0500061559",
   "height": 180,
   "weight": 78,
   "password": "NewPassword123",
-  "emergencyEnabled": false,
+  "emergencyEnabled": true,
   "emergencyContacts": [
     {
       "id": 1,
@@ -64,4 +57,14 @@ Content-Type: application/json
       "phone": "0500000000"
     }
   ]
+}
+
+### PUT request to register a new user (path might be incorrect for login)
+PUT localhost:8080/api/v1/registration
+Content-Type: application/json
+
+{
+  "name": "Bashar upldate 1",
+  "email": "fasfasf@gmail.com",
+  "password": "ASFakf24!%!%22"
 }
