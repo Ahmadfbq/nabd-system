@@ -3,6 +3,7 @@ package com.example.userService.service;
 
 import com.example.userService.model.ChangePasswordRequest;
 import com.example.userService.model.EmergencyContact; // تأكد من استيراد الكلاس الصحيح إذا كان في حزمة مختلفة
+import com.example.notification_service.view.NotificationDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -136,5 +137,12 @@ public class UserService implements UserDetailsService {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format(USER_NOT_FOUND, email)));
+    }
+
+    public void updateUserHealthStatus(NotificationDto notification) {
+        User user = repository.findById(notification.getUserID())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setHealthStatus(notification.getMessage());
+        repository.save(user);
     }
 }

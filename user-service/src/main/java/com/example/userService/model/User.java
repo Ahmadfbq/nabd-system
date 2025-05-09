@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private Integer height;
     private Integer weight;
     private Boolean emergencyEnabled;
+    private String healthStatus;
 
     @Getter
     @JsonIgnore
