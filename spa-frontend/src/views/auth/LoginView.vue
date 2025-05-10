@@ -13,7 +13,7 @@ const login = async () => {
   try {
     loading.value = true
     error.value = ''
-    
+
     const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', {
       email: email.value,
       password: password.value
@@ -22,7 +22,7 @@ const login = async () => {
     // Store tokens
     localStorage.setItem('accessToken', response.data.accessToken)
     localStorage.setItem('refreshToken', response.data.refreshToken)
-    
+
     // Redirect to home
     router.push('/home')
   } catch (err) {
@@ -89,4 +89,4 @@ const login = async () => {
       </form>
     </div>
   </div>
-</template> 
+</template>
