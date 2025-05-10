@@ -7,7 +7,7 @@
     </div>
 
     <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center space-y-8 relative z-10 transform transition-all duration-300 hover:scale-[1.02]">
-      <!-- Logo placeholder -->
+      <!-- Logo -->
       <div class="w-20 h-20 mx-auto bg-[#8FBC8B] rounded-2xl shadow-lg flex items-center justify-center">
         <span class="text-3xl">❤️</span>
       </div>
@@ -20,7 +20,7 @@
       <div class="space-y-6">
         <RouterLink 
           to="/auth/register" 
-          class="btn-primary block w-full py-4 text-lg font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+          class="block w-full py-4 text-lg font-semibold bg-[#8FBC8B] text-white rounded-xl transform transition-all duration-300 hover:scale-[1.02] hover:bg-green-600 hover:shadow-lg"
         >
           Get Started
         </RouterLink>

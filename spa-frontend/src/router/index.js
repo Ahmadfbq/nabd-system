@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthView from '../views/AuthView.vue'
+import WelcomeView from '../views/WelcomeView.vue'
+import LoginView from '../views/auth/LoginView.vue'
+import RegisterView from '../views/auth/RegisterView.vue'
+import ForgotPasswordView from '../views/auth/ForgotPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
@@ -9,29 +12,34 @@ const router = createRouter({
     {
       path: '/',
       name: 'welcome',
-      component: () => import('../views/WelcomeView.vue')
+      component: WelcomeView
     },
     {
-      path: '/auth',
-      name: 'auth',
-      component: AuthView,
-      meta: { requiresAuth: false },
-      children: [
-        {
-          path: '',  // Default child route
-          redirect: 'login'
-        },
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import('../components/auth/LoginForm.vue')
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: () => import('../components/auth/RegisterForm.vue')
-        }
-      ]
+      path: '/auth/login',
+      name: 'login',
+      component: LoginView
+    },
+    {
+      path: '/auth/register',
+      name: 'register',
+      component: RegisterView
+    },
+    {
+      path: '/auth/forgot-password',
+      name: 'forgot-password',
+      component: ForgotPasswordView
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: HomeView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/dashboard',
@@ -58,12 +66,6 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: ProfileView,
-      meta: { requiresAuth: true }
-    },
-    {
       path: '/access-denied',
       name: 'access-denied',
       component: () => import('../views/AccessDeniedView.vue')
@@ -82,12 +84,12 @@ const router = createRouter({
 
 // Navigation guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('token')
+  const isAuthenticated = !!localStorage.getItem('accessToken')
   
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/auth/login')
-  } else if (to.path === '/auth' && isAuthenticated) {
-    next('/dashboard')
+  } else if ((to.path === '/auth/login' || to.path === '/auth/register') && isAuthenticated) {
+    next('/home')
   } else {
     next()
   }
