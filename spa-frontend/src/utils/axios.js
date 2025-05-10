@@ -34,6 +34,10 @@ instance.interceptors.response.use(
       try {
         // Try to refresh token
         const refreshToken = localStorage.getItem('refreshToken')
+        if (!refreshToken) {
+          throw new Error('No refresh token available')
+        }
+
         const response = await axios.post('http://localhost:8080/api/v1/auth/refresh-token', null, {
           headers: {
             Authorization: `Bearer ${refreshToken}`
@@ -41,12 +45,16 @@ instance.interceptors.response.use(
         })
 
         // Update tokens
-        localStorage.setItem('accessToken', response.data.accessToken)
-        localStorage.setItem('refreshToken', response.data.refreshToken)
+        if (response.data.accessToken && response.data.refreshToken) {
+          localStorage.setItem('accessToken', response.data.accessToken)
+          localStorage.setItem('refreshToken', response.data.refreshToken)
 
-        // Retry original request
-        originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`
-        return instance(originalRequest)
+          // Retry original request with new token
+          originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`
+          return instance(originalRequest)
+        } else {
+          throw new Error('Invalid token response')
+        }
       } catch (refreshError) {
         // If refresh fails, logout and redirect to login
         localStorage.removeItem('accessToken')

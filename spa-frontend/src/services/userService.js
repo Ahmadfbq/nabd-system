@@ -16,6 +16,11 @@ const userService = {
   async login(credentials) {
     try {
       const response = await api.auth.login(credentials);
+      // Store tokens in localStorage
+      if (response.data.accessToken && response.data.refreshToken) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+      }
       return response.data;
     } catch (error) {
       console.error('Error logging in:', error);
@@ -26,8 +31,9 @@ const userService = {
   // Logout user
   async logout() {
     try {
-      await api.post('/user/logout');
-      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      return true;
     } catch (error) {
       console.error('Error logging out:', error);
       throw error;
