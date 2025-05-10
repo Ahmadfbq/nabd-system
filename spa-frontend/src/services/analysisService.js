@@ -1,9 +1,9 @@
-import axios from '@/utils/axios'
+import api from './api'
 
 const analysisService = {
-  async getSleepAnalysis() {
+  async getSleepAnalysis(params) {
     try {
-      const response = await axios.get('/analysis/sleep')
+      const response = await api.analysis.getSleepAnalysis(params)
       return response.data
     } catch (error) {
       console.error('Error fetching sleep analysis:', error)
@@ -13,7 +13,7 @@ const analysisService = {
 
   async getHealthInsights() {
     try {
-      const response = await axios.get('/analysis/health-insights')
+      const response = await api.analysis.getHealthInsights()
       return response.data
     } catch (error) {
       console.error('Error fetching health insights:', error)
@@ -21,12 +21,32 @@ const analysisService = {
     }
   },
 
-  async getTrends(timeRange = 'week') {
+  async getHealthTrends(params) {
     try {
-      const response = await axios.get(`/analysis/trends?timeRange=${timeRange}`)
+      const response = await api.analysis.getHealthTrends(params)
       return response.data
     } catch (error) {
-      console.error('Error fetching trends:', error)
+      console.error('Error fetching health trends:', error)
+      throw error
+    }
+  },
+
+  async getAnomalies(params) {
+    try {
+      const response = await api.analysis.getAnomalies(params)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching anomalies:', error)
+      throw error
+    }
+  },
+
+  async getRecommendations() {
+    try {
+      const response = await api.analysis.getRecommendations()
+      return response.data
+    } catch (error) {
+      console.error('Error fetching recommendations:', error)
       throw error
     }
   }

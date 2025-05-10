@@ -1,14 +1,72 @@
-import axios from 'axios';
+import axios from '@/utils/axios'
 import router from '../router';
 
 // Create axios instance with default config
-const api = axios.create({
-  baseURL: '/api', // This will go through Nginx
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json'
+const api = {
+  // Auth endpoints
+  auth: {
+    login: (credentials) => axios.post('/api/v1/auth/authenticate', credentials),
+    register: (userData) => axios.post('/api/v1/auth/register', userData),
+    refreshToken: () => axios.post('/api/v1/auth/refresh-token'),
+    resetPassword: (email) => axios.post('/api/v1/auth/reset-password', { email }),
+    changePassword: (data) => axios.post('/api/v1/auth/change-password', data)
+  },
+
+  // User endpoints
+  user: {
+    getProfile: () => axios.get('/api/v1/users/me'),
+    updateProfile: (data) => axios.put('/api/v1/users/me', data),
+    updateEmergencyContact: (data) => axios.put('/api/v1/users/emergency-contact', data),
+    getEmergencyContact: () => axios.get('/api/v1/users/emergency-contact'),
+    updateNotificationPreferences: (preferences) => 
+      axios.put('/api/v1/users/notification-preferences', preferences),
+    getNotificationPreferences: () => 
+      axios.get('/api/v1/users/notification-preferences')
+  },
+
+  // Device endpoints
+  device: {
+    pair: (deviceId) => axios.post('/api/v1/devices/pair', { deviceId }),
+    unpair: (deviceId) => axios.delete(`/api/v1/devices/${deviceId}`),
+    getPairedDevices: () => axios.get('/api/v1/devices'),
+    getDeviceStatus: (deviceId) => axios.get(`/api/v1/devices/${deviceId}/status`)
+  },
+
+  // Health data endpoints
+  health: {
+    getMeasurements: (params) => axios.get('/api/v1/measurements', { params }),
+    sendMeasurement: (data) => axios.post('/api/v1/measurements', data),
+    getLatestMeasurements: () => axios.get('/api/v1/measurements/latest'),
+    getMeasurementHistory: (params) => 
+      axios.get('/api/v1/measurements/history', { params }),
+    getHealthInsights: () => axios.get('/api/v1/health/insights'),
+    getHealthTrends: (params) => 
+      axios.get('/api/v1/health/trends', { params })
+  },
+
+  // Analysis endpoints
+  analysis: {
+    getSleepAnalysis: (params) => 
+      axios.get('/api/v1/analysis/sleep', { params }),
+    getHealthAnalysis: (params) => 
+      axios.get('/api/v1/analysis/health', { params }),
+    getTrends: (params) => 
+      axios.get('/api/v1/analysis/trends', { params })
+  },
+
+  // Notification endpoints
+  notification: {
+    getNotifications: () => axios.get('/api/v1/notifications'),
+    markAsRead: (notificationId) => 
+      axios.put(`/api/v1/notifications/${notificationId}/read`),
+    markAllAsRead: () => 
+      axios.put('/api/v1/notifications/read-all'),
+    deleteNotification: (notificationId) => 
+      axios.delete(`/api/v1/notifications/${notificationId}`),
+    getUnreadCount: () => 
+      axios.get('/api/v1/notifications/unread/count')
   }
-});
+}
 
 // Request interceptor
 api.interceptors.request.use(

@@ -1,10 +1,10 @@
-import axios from '@/utils/axios'
+import api from './api'
 
 const notificationService = {
   // Get all notifications
   async getNotifications() {
     try {
-      const response = await axios.get('/notifications')
+      const response = await api.notification.getNotifications()
       return response.data
     } catch (error) {
       console.error('Error fetching notifications:', error)
@@ -15,7 +15,7 @@ const notificationService = {
   // Get unread notifications
   async getUnreadNotifications() {
     try {
-      const response = await axios.get('/notifications/unread')
+      const response = await api.notification.getUnreadNotifications()
       return response.data
     } catch (error) {
       console.error('Error fetching unread notifications:', error)
@@ -26,7 +26,7 @@ const notificationService = {
   // Mark notification as read
   async markAsRead(notificationId) {
     try {
-      const response = await axios.put(`/notifications/${notificationId}/read`)
+      const response = await api.notification.markAsRead(notificationId)
       return response.data
     } catch (error) {
       console.error('Error marking notification as read:', error)
@@ -37,7 +37,7 @@ const notificationService = {
   // Mark all notifications as read
   async markAllAsRead() {
     try {
-      const response = await axios.put('/notifications/read-all')
+      const response = await api.notification.markAllAsRead()
       return response.data
     } catch (error) {
       console.error('Error marking all notifications as read:', error)
@@ -48,7 +48,7 @@ const notificationService = {
   // Delete notification
   async deleteNotification(notificationId) {
     try {
-      const response = await axios.delete(`/notifications/${notificationId}`)
+      const response = await api.notification.delete(notificationId)
       return response.data
     } catch (error) {
       console.error('Error deleting notification:', error)
@@ -59,7 +59,7 @@ const notificationService = {
   // Get notification preferences
   async getPreferences() {
     try {
-      const response = await axios.get('/notifications/preferences')
+      const response = await api.notification.getPreferences()
       return response.data
     } catch (error) {
       console.error('Error fetching notification preferences:', error)
@@ -70,7 +70,7 @@ const notificationService = {
   // Update notification preferences
   async updatePreferences(preferences) {
     try {
-      const response = await axios.put('/notifications/preferences', preferences)
+      const response = await api.notification.updatePreferences(preferences)
       return response.data
     } catch (error) {
       console.error('Error updating notification preferences:', error)
@@ -79,7 +79,17 @@ const notificationService = {
   },
 
   updateNotificationSettings(settings) {
-    return axios.put('/notifications/settings', settings)
+    return api.notification.updateSettings(settings)
+  },
+
+  async getUnreadCount() {
+    try {
+      const response = await api.notification.getUnreadCount()
+      return response.data
+    } catch (error) {
+      console.error('Error fetching unread notification count:', error)
+      throw error
+    }
   }
 }
 

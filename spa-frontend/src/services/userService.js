@@ -1,13 +1,13 @@
 import api from './api';
 
-export const userService = {
+const userService = {
   // Register new user
   async register(userData) {
     try {
-      const response = await api.post('/user/register', userData);
+      const response = await api.auth.register(userData);
       return response.data;
     } catch (error) {
-      console.error('Error registering user:', error);
+      console.error('Error registering:', error);
       throw error;
     }
   },
@@ -15,10 +15,7 @@ export const userService = {
   // Login user
   async login(credentials) {
     try {
-      const response = await api.post('/user/login', credentials);
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-      }
+      const response = await api.auth.login(credentials);
       return response.data;
     } catch (error) {
       console.error('Error logging in:', error);
@@ -40,10 +37,10 @@ export const userService = {
   // Get user profile
   async getProfile() {
     try {
-      const response = await api.get('/user/profile');
+      const response = await api.user.getProfile();
       return response.data;
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error('Error fetching profile:', error);
       throw error;
     }
   },
@@ -51,10 +48,10 @@ export const userService = {
   // Update user profile
   async updateProfile(profileData) {
     try {
-      const response = await api.put('/user/profile', profileData);
+      const response = await api.user.updateProfile(profileData);
       return response.data;
     } catch (error) {
-      console.error('Error updating user profile:', error);
+      console.error('Error updating profile:', error);
       throw error;
     }
   },
@@ -90,5 +87,47 @@ export const userService = {
       console.error('Error updating user settings:', error);
       throw error;
     }
+  },
+
+  async resetPassword(email) {
+    try {
+      const response = await api.auth.resetPassword(email);
+      return response.data;
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      throw error;
+    }
+  },
+
+  async updateEmergencyContact(contactData) {
+    try {
+      const response = await api.user.updateEmergencyContact(contactData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating emergency contact:', error);
+      throw error;
+    }
+  },
+
+  async getNotifications() {
+    try {
+      const response = await api.notification.getNotifications();
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      throw error;
+    }
+  },
+
+  async markNotificationAsRead(notificationId) {
+    try {
+      const response = await api.notification.markAsRead(notificationId);
+      return response.data;
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      throw error;
+    }
   }
 };
+
+export default userService;
