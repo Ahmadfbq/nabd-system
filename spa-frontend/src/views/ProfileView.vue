@@ -44,12 +44,13 @@ const fetchProfile = async () => {
   try {
     loading.value = true
     error.value = ''
-    
+
     const response = await api.user.getProfile()
     user.value = response.data
-    
+
     // Update form data
     formData.value = {
+      id: user.value.id,
       name: user.value.name,
       email: user.value.email,
       phone: user.value.phone || '',
@@ -70,11 +71,11 @@ const updateProfile = async () => {
     loading.value = true
     error.value = ''
     success.value = ''
-    
-    await api.user.updateProfile(formData.value)
+
+    const userId = formData.value.id
+    await api.user.updateProfile(userId, formData.value)
+
     success.value = 'Profile updated successfully'
-    
-    // Refresh profile
     await fetchProfile()
   } catch (err) {
     error.value = err.response?.data?.message || 'Failed to update profile. Please try again.'
@@ -94,13 +95,13 @@ const changePassword = async () => {
     loading.value = true
     error.value = ''
     success.value = ''
-    
+
     await api.auth.changePassword({
       currentPassword: passwordForm.value.currentPassword,
       newPassword: passwordForm.value.newPassword,
       confirmationPassword: passwordForm.value.confirmPassword
     })
-    
+
     success.value = 'Password changed successfully'
     passwordForm.value = {
       currentPassword: '',
@@ -125,7 +126,7 @@ const pairDevice = async () => {
     loading.value = true
     error.value = ''
     success.value = ''
-    
+
     await healthDataService.pairDevice(deviceId.value)
     success.value = 'Device paired successfully'
     deviceId.value = ''
@@ -228,7 +229,7 @@ onMounted(async () => {
       <!-- Profile Form -->
       <div class="bg-white rounded-xl shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold text-gray-800 mb-6">Personal Information</h2>
-        
+
         <form @submit.prevent="updateProfile" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -278,16 +279,6 @@ onMounted(async () => {
               />
             </div>
 
-            <div class="flex items-center">
-              <input
-                v-model="formData.emergencyEnabled"
-                type="checkbox"
-                class="h-4 w-4 text-[#8FBC8B] focus:ring-[#8FBC8B] border-gray-300 rounded"
-              />
-              <label class="ml-2 block text-sm text-gray-700">
-                Enable Emergency Notifications
-              </label>
-            </div>
           </div>
 
           <div class="flex justify-end">
@@ -305,7 +296,7 @@ onMounted(async () => {
       <!-- Password Change Form -->
       <div class="bg-white rounded-xl shadow-md p-6">
         <h2 class="text-xl font-semibold text-gray-800 mb-6">Change Password</h2>
-        
+
         <form @submit.prevent="changePassword" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -354,7 +345,7 @@ onMounted(async () => {
       <!-- Device Management -->
       <div class="bg-white rounded-xl shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold text-gray-800 mb-6">Device Management</h2>
-        
+
         <div class="space-y-6">
           <!-- Pair New Device -->
           <div class="flex items-end space-x-4">
@@ -404,7 +395,7 @@ onMounted(async () => {
       <!-- Emergency Contact Section -->
       <div class="bg-white rounded-xl shadow-md p-6">
         <h2 class="text-xl font-semibold text-gray-800 mb-6">Emergency Contact</h2>
-        
+
         <form @submit.prevent="updateEmergencyContact" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

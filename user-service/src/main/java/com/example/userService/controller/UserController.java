@@ -3,6 +3,7 @@ package com.example.userService.controller;
 import com.example.userService.model.User;
 import com.example.userService.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,6 +82,25 @@ public class UserController {
     //    }
     //    return userService.saveUser(user);
     //     }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getMe() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            User currentUser = userService.getUserByEmail(userDetails.getUsername()); // استخدم UserService لجلب المستخدم الكامل
+            if (currentUser != null) {
+                return ResponseEntity.ok(currentUser);
+            } else {
+                return ResponseEntity.notFound().build(); // أو Unauthorized حسب الحاجة
+            }
+        } else {
+            // المستخدم غير مصادق
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
 
 

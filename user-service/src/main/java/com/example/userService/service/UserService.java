@@ -145,6 +145,10 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("لم يتم العثور على مستخدم بالبريد الإلكتروني: " + email));
     }
 
+    public User getUserByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("لم يتم العثور على مستخدم بالبريد الإلكتروني: " + email));
+    }
 
 //    public void updateUserHealthStatus(NotificationDto notification) {
 //        User user = repository.findById(notification.getUserID())

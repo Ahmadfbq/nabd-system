@@ -15,12 +15,12 @@ const api = {
   // User endpoints
   user: {
     getProfile: () => axios.get('/api/v1/users/me'),
-    updateProfile: (data) => axios.put('/api/v1/users/me', data),
+    updateProfile: (userId, data) => axios.put(`/api/v1/users/${userId}`, data),
     updateEmergencyContact: (data) => axios.put('/api/v1/users/emergency-contact', data),
     getEmergencyContact: () => axios.get('/api/v1/users/emergency-contact'),
-    updateNotificationPreferences: (preferences) => 
+    updateNotificationPreferences: (preferences) =>
       axios.put('/api/v1/users/notification-preferences', preferences),
-    getNotificationPreferences: () => 
+    getNotificationPreferences: () =>
       axios.get('/api/v1/users/notification-preferences')
   },
 
@@ -31,11 +31,11 @@ const api = {
       // Ensure deviceId is a number
       const numericDeviceId = Number(deviceId)
       const numericUserId = Number(userId)
-      
+
       if (isNaN(numericDeviceId) || isNaN(numericUserId)) {
         return Promise.reject(new Error('Invalid device ID or user ID'))
       }
-      
+
       return axios.post(`/api/v1/wearable-devices/${numericDeviceId}/pair/${numericUserId}`)
     },
     unpair: (deviceId) => {
@@ -65,33 +65,33 @@ const api = {
     getMeasurements: (params) => axios.get('/api/v1/measurements', { params }),
     sendMeasurement: (data) => axios.post('/api/v1/measurements', data),
     getLatestMeasurements: () => axios.get('/api/v1/measurements/latest'),
-    getMeasurementHistory: (params) => 
+    getMeasurementHistory: (params) =>
       axios.get('/api/v1/measurements/history', { params }),
     getHealthInsights: () => axios.get('/api/v1/health/insights'),
-    getHealthTrends: (params) => 
+    getHealthTrends: (params) =>
       axios.get('/api/v1/health/trends', { params })
   },
 
   // Analysis endpoints
   analysis: {
-    getSleepAnalysis: (params) => 
+    getSleepAnalysis: (params) =>
       axios.get('/api/v1/analysis/sleep', { params }),
-    getHealthAnalysis: (params) => 
+    getHealthAnalysis: (params) =>
       axios.get('/api/v1/analysis/health', { params }),
-    getTrends: (params) => 
+    getTrends: (params) =>
       axios.get('/api/v1/analysis/trends', { params })
   },
 
   // Notification endpoints
   notification: {
     getNotifications: () => axios.get('/api/v1/notifications'),
-    markAsRead: (notificationId) => 
+    markAsRead: (notificationId) =>
       axios.put(`/api/v1/notifications/${notificationId}/read`),
-    markAllAsRead: () => 
+    markAllAsRead: () =>
       axios.put('/api/v1/notifications/read-all'),
-    deleteNotification: (notificationId) => 
+    deleteNotification: (notificationId) =>
       axios.delete(`/api/v1/notifications/${notificationId}`),
-    getUnreadCount: () => 
+    getUnreadCount: () =>
       axios.get('/api/v1/notifications/unread/count')
   }
 }

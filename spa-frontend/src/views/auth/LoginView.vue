@@ -30,13 +30,15 @@ const login = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8FBC8B] to-green-600 p-6">
-    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full">
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-[#8FBC8B]">Welcome Back</h1>
-        <p class="text-gray-600 mt-2">Please sign in to continue</p>
+  <div class="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#8FBC8B] to-green-600 p-0 md:p-6">
+    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl px-4 py-8 sm:p-8 md:p-12 w-full max-w-lg text-center space-y-8 relative z-10 transition-all duration-300">
+      <div class="w-16 h-16 mx-auto bg-[#8FBC8B] rounded-2xl shadow-lg flex items-center justify-center mb-2">
+        <span class="text-3xl">❤️</span>
       </div>
-
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#4B7156] mb-2">Welcome Back</h1>
+        <p class="text-gray-600 text-base sm:text-lg">Please sign in to continue</p>
+      </div>
       <form @submit.prevent="login" class="space-y-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -48,7 +50,6 @@ const login = async () => {
             placeholder="Enter your email"
           />
         </div>
-
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
           <input
@@ -59,23 +60,19 @@ const login = async () => {
             placeholder="Enter your password"
           />
         </div>
-
         <div class="flex items-center justify-between">
           <router-link to="/auth/forgot-password" class="text-sm text-[#8FBC8B] hover:underline">
             Forgot password?
           </router-link>
         </div>
-
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-[#8FBC8B] text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50"
+          class="w-full bg-[#8FBC8B] text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#8FBC8B] focus:ring-offset-2"
         >
           {{ loading ? 'Signing in...' : 'Sign In' }}
         </button>
-
         <p v-if="error" class="text-red-500 text-sm text-center">{{ error }}</p>
-
         <p class="text-center text-gray-600">
           Don't have an account?
           <router-link to="/auth/register" class="text-[#8FBC8B] hover:underline">
@@ -86,3 +83,9 @@ const login = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+</style>

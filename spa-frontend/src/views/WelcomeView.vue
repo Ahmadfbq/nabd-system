@@ -1,49 +1,41 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#8FBC8B] to-green-600 flex items-center justify-center p-6 relative overflow-hidden">
-    <!-- Decorative elements -->
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center space-y-8 relative z-10 transform transition-all duration-300 hover:scale-[1.02]">
+  <div class="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#8FBC8B] to-green-600 p-0 md:p-6">
+    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl px-4 py-8 sm:p-8 md:p-12 w-full max-w-lg text-center space-y-8 relative z-10 transition-all duration-300">
       <!-- Logo -->
-      <div class="w-20 h-20 mx-auto bg-[#8FBC8B] rounded-2xl shadow-lg flex items-center justify-center">
+      <div class="w-16 h-16 mx-auto bg-[#8FBC8B] rounded-2xl shadow-lg flex items-center justify-center mb-2">
         <span class="text-3xl">❤️</span>
       </div>
 
-      <div class="space-y-4">
-        <h1 class="text-4xl md:text-5xl font-bold text-[#8FBC8B] tracking-tight">Welcome to Nabd</h1>
-        <p class="text-gray-600 text-lg">Your personal health monitoring companion</p>
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#4B7156] mb-2">Welcome to <span class="text-[#8FBC8B]">Nabd</span></h1>
+        <p class="text-gray-600 text-base sm:text-lg">Your personal health monitoring companion</p>
       </div>
 
-      <div class="space-y-6">
+      <RouterLink 
+        to="/auth/register" 
+        class="block w-full py-3 text-lg font-semibold bg-[#8FBC8B] text-white rounded-xl shadow-md hover:bg-green-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#8FBC8B] focus:ring-offset-2 mb-2"
+      >
+        Get Started
+      </RouterLink>
+      <p class="text-sm text-gray-500 mb-4">
+        Already have an account? 
         <RouterLink 
-          to="/auth/register" 
-          class="block w-full py-4 text-lg font-semibold bg-[#8FBC8B] text-white rounded-xl transform transition-all duration-300 hover:scale-[1.02] hover:bg-green-600 hover:shadow-lg"
+          to="/auth/login" 
+          class="text-[#8FBC8B] hover:underline font-medium"
         >
-          Get Started
+          Login here
         </RouterLink>
-        <p class="text-sm text-gray-500">
-          Already have an account? 
-          <RouterLink 
-            to="/auth/login" 
-            class="text-[#8FBC8B] hover:underline font-medium"
-          >
-            Login here
-          </RouterLink>
-        </p>
-      </div>
+      </p>
 
       <!-- Features preview -->
-      <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
-        <div class="text-center p-4 rounded-xl bg-gray-50">
-          <span class="text-2xl mb-2 block">📊</span>
-          <p class="text-sm text-gray-600">Health Tracking</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+        <div class="flex flex-col items-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+          <span class="text-2xl mb-1">📊</span>
+          <span class="text-base font-medium text-gray-700">Health Tracking</span>
         </div>
-        <div class="text-center p-4 rounded-xl bg-gray-50">
-          <span class="text-2xl mb-2 block">💤</span>
-          <p class="text-sm text-gray-600">Sleep Analysis</p>
+        <div class="flex flex-col items-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+          <span class="text-2xl mb-1">💤</span>
+          <span class="text-base font-medium text-gray-700">Sleep Analysis</span>
         </div>
       </div>
     </div>
@@ -55,7 +47,7 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <style scoped>
-.btn-primary {
-  @apply bg-[#8FBC8B] text-white font-semibold py-2 px-4 rounded-xl hover:bg-green-600 transition-all duration-300 shadow-md;
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 </style> 

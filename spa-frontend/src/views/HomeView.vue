@@ -34,16 +34,16 @@ const sendMeasurement = async () => {
   try {
     loading.value = true
     error.value = ''
-    
+
     const measurement = generateFakeMeasurement()
     await axios.post('http://localhost:8084/measurements', measurement)
-    
+
     // Show notification
     showNotification.value = true
     setTimeout(() => {
       showNotification.value = false
     }, 3000)
-    
+
     // Refresh measurements
     fetchMeasurements()
   } catch (err) {
@@ -58,7 +58,7 @@ const fetchMeasurements = async () => {
   try {
     loading.value = true
     error.value = ''
-    
+
     const response = await axios.get('http://localhost:8084/measurements')
     measurements.value = response.data
   } catch (err) {
@@ -110,7 +110,7 @@ onMounted(() => {
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Top Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="bg-white shadow-sm sticky top-0 ">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -119,7 +119,7 @@ onMounted(() => {
               <span class="ml-2 text-xl font-bold text-[#8FBC8B]">Nabd</span>
             </div>
           </div>
-          
+
           <div class="flex items-center space-x-4">
             <RouterLink to="/profile" class="text-gray-600 hover:text-[#8FBC8B]">
               <span class="text-lg">👤</span>
@@ -136,8 +136,8 @@ onMounted(() => {
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Quick Actions -->
       <div class="fixed bottom-6 right-6 flex flex-col space-y-3 z-50">
-        <button 
-          @click="sendMeasurement" 
+        <button
+          @click="sendMeasurement"
           :disabled="loading"
           class="relative group bg-[#8FBC8B] text-white p-4 rounded-full shadow-lg hover:scale-105 transition-all duration-300"
         >
@@ -147,8 +147,8 @@ onMounted(() => {
           </span>
         </button>
 
-        <button 
-          @click="recordSleep" 
+        <button
+          @click="recordSleep"
           class="relative group bg-[#8FBC8B] text-white p-4 rounded-full shadow-lg hover:scale-105 transition-all duration-300"
         >
           😴
@@ -185,7 +185,7 @@ onMounted(() => {
         <div class="space-y-6">
           <!-- Sleep Pattern Section -->
           <SleepSection ref="sleepSectionRef" />
-          
+
           <!-- Notifications Section -->
           <NotificationsSection ref="notificationsSectionRef" />
         </div>
@@ -242,12 +242,12 @@ onMounted(() => {
     </main>
 
     <!-- Settings Menu -->
-    <div 
-      v-if="isMenuOpen" 
-      class="fixed inset-0 bg-black bg-opacity-50 z-40"
+    <div
+      v-if="isMenuOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 z-60"
       @click="isMenuOpen = false"
     >
-      <div 
+      <div
         class="absolute right-0 top-0 h-full w-80 bg-white shadow-xl p-6"
         @click.stop
       >
