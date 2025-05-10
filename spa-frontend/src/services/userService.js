@@ -5,6 +5,19 @@ const userService = {
   async register(userData) {
     try {
       const response = await api.auth.register(userData);
+      console.log('Register response:', response.data);
+      
+      // Check for both camelCase and snake_case token properties
+      const accessToken = response.data.accessToken || response.data.access_token;
+      const refreshToken = response.data.refreshToken || response.data.refresh_token;
+      
+      if (accessToken && refreshToken) {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      } else {
+        console.error('Token structure:', response.data);
+        throw new Error('No tokens received from server');
+      }
       return response.data;
     } catch (error) {
       console.error('Error registering:', error);
@@ -16,10 +29,18 @@ const userService = {
   async login(credentials) {
     try {
       const response = await api.auth.login(credentials);
-      // Store tokens in localStorage
-      if (response.data.accessToken && response.data.refreshToken) {
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+      console.log('Login response:', response.data);
+      
+      // Check for both camelCase and snake_case token properties
+      const accessToken = response.data.accessToken || response.data.access_token;
+      const refreshToken = response.data.refreshToken || response.data.refresh_token;
+      
+      if (accessToken && refreshToken) {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      } else {
+        console.error('Token structure:', response.data);
+        throw new Error('No tokens received from server');
       }
       return response.data;
     } catch (error) {
@@ -38,6 +59,21 @@ const userService = {
       console.error('Error logging out:', error);
       throw error;
     }
+  },
+
+  // Check if user is authenticated
+  isAuthenticated() {
+    return !!localStorage.getItem('accessToken');
+  },
+
+  // Get access token
+  getAccessToken() {
+    return localStorage.getItem('accessToken');
+  },
+
+  // Get refresh token
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken');
   },
 
   // Get user profile

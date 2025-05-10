@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import userService from '@/services/userService'
 
 const router = useRouter()
 const email = ref('')
@@ -14,14 +14,10 @@ const login = async () => {
     loading.value = true
     error.value = ''
 
-    const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', {
+    await userService.login({
       email: email.value,
       password: password.value
     })
-
-    // Store tokens
-    localStorage.setItem('accessToken', response.data.accessToken)
-    localStorage.setItem('refreshToken', response.data.refreshToken)
 
     // Redirect to home
     router.push('/home')

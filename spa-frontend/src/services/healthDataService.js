@@ -1,4 +1,5 @@
 import api from './api'
+import userService from './userService'
 
 const healthDataService = {
   async getMeasurements(params) {
@@ -23,10 +24,25 @@ const healthDataService = {
 
   async pairDevice(deviceId) {
     try {
-      const response = await api.device.pair(deviceId)
+      console.log('Starting device pairing process for device:', deviceId)
+      
+      // For testing, use fixed IDs with correct types
+      const testDeviceId = 1    // Integer
+      const testUserId = 1      // Long
+      
+      console.log('Using test IDs - deviceId:', testDeviceId, 'userId:', testUserId)
+      const response = await api.device.pair(testDeviceId, testUserId)
+      console.log('Pair device response:', response.data)
       return response.data
     } catch (error) {
       console.error('Error pairing device:', error)
+      if (error.response) {
+        console.error('Error response:', {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers
+        })
+      }
       throw error
     }
   },

@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 import healthDataService from '@/services/healthDataService'
+import userService from '@/services/userService'
+import { useRouter } from 'vue-router'
 
 const user = ref(null)
 const loading = ref(false)
@@ -35,13 +37,15 @@ const emergencyContact = ref({
   enabled: false
 })
 
+const router = useRouter()
+
 // Fetch user profile
 const fetchProfile = async () => {
   try {
     loading.value = true
     error.value = ''
     
-    const response = await axios.get('http://localhost:8080/api/v1/users/me')
+    const response = await api.user.getProfile()
     user.value = response.data
     
     // Update form data
@@ -67,7 +71,7 @@ const updateProfile = async () => {
     error.value = ''
     success.value = ''
     
-    await axios.put('http://localhost:8080/api/v1/users/me', formData.value)
+    await api.user.updateProfile(formData.value)
     success.value = 'Profile updated successfully'
     
     // Refresh profile
@@ -91,7 +95,7 @@ const changePassword = async () => {
     error.value = ''
     success.value = ''
     
-    await axios.post('http://localhost:8080/api/v1/users/change-password', {
+    await api.auth.changePassword({
       currentPassword: passwordForm.value.currentPassword,
       newPassword: passwordForm.value.newPassword,
       confirmationPassword: passwordForm.value.confirmPassword
@@ -113,14 +117,26 @@ const changePassword = async () => {
 // Add these methods in the setup
 const pairDevice = async () => {
   try {
+    if (!deviceId.value) {
+      error.value = 'Please enter a device ID'
+      return
+    }
+
     loading.value = true
     error.value = ''
+    success.value = ''
+    
     await healthDataService.pairDevice(deviceId.value)
     success.value = 'Device paired successfully'
     deviceId.value = ''
     await fetchPairedDevices()
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to pair device'
+    console.error('Pair device error:', err)
+    if (err.message === 'User profile not found') {
+      error.value = 'Please complete your profile before pairing a device'
+    } else {
+      error.value = err.response?.data?.message || 'Failed to pair device. Please try again.'
+    }
   } finally {
     loading.value = false
   }
@@ -153,7 +169,7 @@ const updateEmergencyContact = async () => {
   try {
     loading.value = true
     error.value = ''
-    await axios.put('/api/v1/users/emergency-contact', emergencyContact.value)
+    await api.user.updateEmergencyContact(emergencyContact.value)
     success.value = 'Emergency contact updated successfully'
   } catch (err) {
     error.value = err.response?.data?.message || 'Failed to update emergency contact'
@@ -162,9 +178,25 @@ const updateEmergencyContact = async () => {
   }
 }
 
-onMounted(() => {
-  fetchProfile()
-  fetchPairedDevices()
+onMounted(async () => {
+  // Check authentication
+  if (!userService.isAuthenticated()) {
+    console.error('User is not authenticated')
+    error.value = 'Please log in to access this page'
+    return
+  }
+
+  try {
+    await fetchProfile()
+    await fetchPairedDevices()
+  } catch (err) {
+    console.error('Error in onMounted:', err)
+    if (err.response?.status === 403) {
+      error.value = 'Your session has expired. Please log in again.'
+      // Optionally redirect to login
+      // router.push('/auth/login')
+    }
+  }
 })
 </script>
 

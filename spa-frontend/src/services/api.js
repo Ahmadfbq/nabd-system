@@ -26,10 +26,38 @@ const api = {
 
   // Device endpoints
   device: {
-    pair: (deviceId) => axios.post('/api/v1/devices/pair', { deviceId }),
-    unpair: (deviceId) => axios.delete(`/api/v1/devices/${deviceId}`),
-    getPairedDevices: () => axios.get('/api/v1/devices'),
-    getDeviceStatus: (deviceId) => axios.get(`/api/v1/devices/${deviceId}/status`)
+    pair: (deviceId, userId) => {
+      console.log('API: Calling pair endpoint with deviceId:', deviceId, 'userId:', userId)
+      // Ensure deviceId is a number
+      const numericDeviceId = Number(deviceId)
+      const numericUserId = Number(userId)
+      
+      if (isNaN(numericDeviceId) || isNaN(numericUserId)) {
+        return Promise.reject(new Error('Invalid device ID or user ID'))
+      }
+      
+      return axios.post(`/api/v1/wearable-devices/${numericDeviceId}/pair/${numericUserId}`)
+    },
+    unpair: (deviceId) => {
+      console.log('API: Calling unpair endpoint for deviceId:', deviceId)
+      const numericDeviceId = Number(deviceId)
+      if (isNaN(numericDeviceId)) {
+        return Promise.reject(new Error('Invalid device ID'))
+      }
+      return axios.delete(`/api/v1/wearable-devices/${numericDeviceId}`)
+    },
+    getPairedDevices: () => {
+      console.log('API: Fetching paired devices')
+      return axios.get('/api/v1/wearable-devices')
+    },
+    getDeviceStatus: (deviceId) => {
+      console.log('API: Getting status for deviceId:', deviceId)
+      const numericDeviceId = Number(deviceId)
+      if (isNaN(numericDeviceId)) {
+        return Promise.reject(new Error('Invalid device ID'))
+      }
+      return axios.get(`/api/v1/wearable-devices/${numericDeviceId}/status`)
+    }
   },
 
   // Health data endpoints
