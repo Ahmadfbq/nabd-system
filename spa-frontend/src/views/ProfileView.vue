@@ -9,6 +9,7 @@ const user = ref(null)
 const loading = ref(false)
 const error = ref('')
 const success = ref('')
+const userId = ref(null)
 
 // Form data
 const formData = ref({
@@ -47,7 +48,7 @@ const fetchProfile = async () => {
 
     const response = await api.user.getProfile()
     user.value = response.data
-
+    userId.value = response.data.id
     // Update form data
     formData.value = {
       id: user.value.id,
@@ -72,8 +73,8 @@ const updateProfile = async () => {
     error.value = ''
     success.value = ''
 
-    const userId = formData.value.id
-    await api.user.updateProfile(userId, formData.value)
+    // const userId = formData.value.id
+    await api.user.updateProfile(userId.value, formData.value)
 
     success.value = 'Profile updated successfully'
     await fetchProfile()
@@ -127,7 +128,7 @@ const pairDevice = async () => {
     error.value = ''
     success.value = ''
 
-    await healthDataService.pairDevice(deviceId.value)
+    await healthDataService.pairDevice(deviceId.value, userId.value)
     success.value = 'Device paired successfully'
     deviceId.value = ''
     await fetchPairedDevices()
@@ -418,15 +419,7 @@ onMounted(async () => {
               />
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Relationship</label>
-              <input
-                v-model="emergencyContact.relationship"
-                type="text"
-                required
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8FBC8B] focus:border-transparent"
-              />
-            </div>
+
 
             <div class="flex items-center">
               <input

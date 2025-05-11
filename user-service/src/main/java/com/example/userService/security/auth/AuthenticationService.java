@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -112,4 +113,30 @@ public class AuthenticationService {
       }
     }
   }
+
+
+  public void changePassword(ChangePasswordRequest request) {
+    // 1. Get current authenticated user's email
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    // 2. Load the user
+    var user = repository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    // 3. Validate current password
+    if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+      throw new RuntimeException("Current password is incorrect");
+    }
+
+    // 4. Validate new password confirmation
+    if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+      throw new RuntimeException("New passwords do not match");
+    }
+
+    // 5. Update and save the new password
+    user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+    repository.save(user);
+  }
+
+
 }

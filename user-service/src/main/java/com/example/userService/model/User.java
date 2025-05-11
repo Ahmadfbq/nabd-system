@@ -32,6 +32,7 @@ public class User implements UserDetails {
 //    private Integer version;
 
     private String name;
+    @Column(unique = true)
     private String email;
     private String phone;
     private Integer height;

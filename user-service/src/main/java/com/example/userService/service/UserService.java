@@ -50,6 +50,9 @@ public class UserService implements UserDetailsService {
                     if (updatedUser.getName() != null) {
                         existingUser.setName(updatedUser.getName());
                     }
+                    if (updatedUser.getPhone() != null) {
+                        existingUser.setPhone(updatedUser.getPhone());
+                    }
                     if (updatedUser.getEmail() != null) {
                         existingUser.setEmail(updatedUser.getEmail());
                     }

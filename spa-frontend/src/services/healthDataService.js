@@ -22,17 +22,9 @@ const healthDataService = {
     }
   },
 
-  async pairDevice(deviceId) {
+  async pairDevice(deviceId, userId) {
     try {
-      console.log('Starting device pairing process for device:', deviceId)
-      
-      // For testing, use fixed IDs with correct types
-      const testDeviceId = 1    // Integer
-      const testUserId = 1      // Long
-      
-      console.log('Using test IDs - deviceId:', testDeviceId, 'userId:', testUserId)
-      const response = await api.device.pair(testDeviceId, testUserId)
-      console.log('Pair device response:', response.data)
+      const response = await api.device.pair(deviceId, userId)
       return response.data
     } catch (error) {
       console.error('Error pairing device:', error)

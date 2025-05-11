@@ -16,7 +16,7 @@ const api = {
   user: {
     getProfile: () => axios.get('/api/v1/users/me'),
     updateProfile: (userId, data) => axios.put(`/api/v1/users/${userId}`, data),
-    updateEmergencyContact: (data) => axios.put('/api/v1/users/emergency-contact', data),
+    updateUserEmergency: (userId, data) => axios.put(`/api/v1/users/${userId}`, data),
     getEmergencyContact: () => axios.get('/api/v1/users/emergency-contact'),
     updateNotificationPreferences: (preferences) =>
       axios.put('/api/v1/users/notification-preferences', preferences),

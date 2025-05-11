@@ -90,14 +90,14 @@ public class UserController {
 
         if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
-            User currentUser = userService.getUserByEmail(userDetails.getUsername()); // استخدم UserService لجلب المستخدم الكامل
+            User currentUser = userService.getUserByEmail(userDetails.getUsername()); // use UserService to bring all user details
             if (currentUser != null) {
                 return ResponseEntity.ok(currentUser);
             } else {
-                return ResponseEntity.notFound().build(); // أو Unauthorized حسب الحاجة
+                return ResponseEntity.notFound().build(); //or Unauthorized depend on you needs
             }
         } else {
-            // المستخدم غير مصادق
+            // user is not authorized
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

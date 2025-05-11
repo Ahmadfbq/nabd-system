@@ -1,14 +1,19 @@
 package com.example.userService.controller;
 
 import com.example.userService.model.User;
+import com.example.userService.repository.UserRepository;
 import com.example.userService.model.WearableDevice;
+import com.example.userService.repository.UserRepository;
+import com.example.userService.repository.WearableDeviceRepository;
 import com.example.userService.service.UserService;
 import com.example.userService.service.WearableDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -71,4 +76,19 @@ public class WearableDeviceController {
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    private final UserRepository userRepository;
+    private final WearableDeviceRepository wearableDeviceRepository;
+
+    @GetMapping
+    public ResponseEntity<List<WearableDevice>> getUserDevices() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<WearableDevice> devices = wearableDeviceRepository.findAllByUserId(user.getId());
+        return ResponseEntity.ok(devices);
+    }
+
+
 }
