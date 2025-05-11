@@ -16,7 +16,7 @@ const api = {
   user: {
     getProfile: () => axios.get('/api/v1/users/me'),
     updateProfile: (userId, data) => axios.put(`/api/v1/users/${userId}`, data),
-    updateUserEmergency: (userId, data) => axios.put(`/api/v1/users/${userId}`, data),
+    addEmergencyContact: (contact) => axios.post('/api/v1/emergency-contacts', contact),
     getEmergencyContact: () => axios.get('/api/v1/users/emergency-contact'),
     updateNotificationPreferences: (preferences) =>
       axios.put('/api/v1/users/notification-preferences', preferences),
@@ -102,5 +102,7 @@ export const ApiResponse = {
   ERROR: 'error',
   LOADING: 'loading'
 };
+
+console.log('API service being exported:', api)
 
 export default api;

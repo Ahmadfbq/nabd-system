@@ -5,6 +5,9 @@ import healthDataService from '@/services/healthDataService'
 import userService from '@/services/userService'
 import { useRouter } from 'vue-router'
 
+console.log('API object:', api)
+console.log('API user methods:', api.user)
+
 const user = ref(null)
 const loading = ref(false)
 const error = ref('')
@@ -17,8 +20,7 @@ const formData = ref({
   email: '',
   phone: '',
   height: '',
-  weight: '',
-  emergencyEnabled: false
+  weight: ''
 })
 
 // Password change form
@@ -31,11 +33,11 @@ const passwordForm = ref({
 // Add these refs in the setup
 const deviceId = ref('')
 const pairedDevices = ref([])
+const emergencyEnabled = ref(false)
+
 const emergencyContact = ref({
   name: '',
-  phone: '',
-  relationship: '',
-  enabled: false
+  phone: ''
 })
 
 const router = useRouter()
@@ -49,6 +51,7 @@ const fetchProfile = async () => {
     const response = await api.user.getProfile()
     user.value = response.data
     userId.value = response.data.id
+
     // Update form data
     formData.value = {
       id: user.value.id,
@@ -56,15 +59,18 @@ const fetchProfile = async () => {
       email: user.value.email,
       phone: user.value.phone || '',
       height: user.value.height || '',
-      weight: user.value.weight || '',
-      emergencyEnabled: user.value.emergencyEnabled || false
+      weight: user.value.weight || ''
     }
+
+    emergencyEnabled.value = user.value.emergencyEnabled || false
   } catch (err) {
     error.value = 'Failed to fetch profile. Please try again.'
   } finally {
     loading.value = false
   }
 }
+
+
 
 // Update profile
 const updateProfile = async () => {
@@ -169,16 +175,39 @@ const unpairDevice = async (deviceId) => {
 
 const updateEmergencyContact = async () => {
   try {
+    if (!userId.value) {
+      error.value = 'User ID is missing. Please try refreshing the page.'
+      return
+    }
+
     loading.value = true
     error.value = ''
-    await api.user.updateEmergencyContact(emergencyContact.value)
-    success.value = 'Emergency contact updated successfully'
+    success.value = ''
+
+    const payload = {
+      name: emergencyContact.value.name,
+      phone: emergencyContact.value.phone,
+      user: {
+        id: Number(userId.value)
+      }
+    }
+
+    console.log('Sending emergency contact payload:', payload)
+    const response = await api.user.addEmergencyContact(payload)
+    console.log('Emergency contact response:', response)
+    success.value = 'Emergency contact added successfully'
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to update emergency contact'
+    console.error('❌ Error:', err)
+    if (err.response?.data === 'User ID is missing') {
+      error.value = 'User ID is missing. Please try refreshing the page.'
+    } else {
+      error.value = err.response?.data?.message || 'Failed to update emergency contact'
+    }
   } finally {
     loading.value = false
   }
 }
+
 
 onMounted(async () => {
   // Check authentication
@@ -393,57 +422,47 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Emergency Contact Section -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-6">Emergency Contact</h2>
+ <!-- Emergency Contact Section -->
+<div class="bg-white rounded-xl shadow-md p-6">
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">Emergency Contact</h2>
 
-        <form @submit.prevent="updateEmergencyContact" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Contact Name</label>
-              <input
-                v-model="emergencyContact.name"
-                type="text"
-                required
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8FBC8B] focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-              <input
-                v-model="emergencyContact.phone"
-                type="tel"
-                required
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8FBC8B] focus:border-transparent"
-              />
-            </div>
-
-
-
-            <div class="flex items-center">
-              <input
-                v-model="emergencyContact.enabled"
-                type="checkbox"
-                class="h-4 w-4 text-[#8FBC8B] focus:ring-[#8FBC8B] border-gray-300 rounded"
-              />
-              <label class="ml-2 block text-sm text-gray-700">
-                Enable Emergency Notifications
-              </label>
-            </div>
-          </div>
-
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              :disabled="loading"
-              class="bg-[#8FBC8B] text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50"
-            >
-              {{ loading ? 'Saving...' : 'Save Emergency Contact' }}
-            </button>
-          </div>
-        </form>
+  <form @submit.prevent="updateEmergencyContact" class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Contact Name</label>
+        <input
+          v-model="emergencyContact.name"
+          type="text"
+          required
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8FBC8B] focus:border-transparent"
+        />
       </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Contact Phone</label>
+        <input
+          v-model="emergencyContact.phone"
+          type="tel"
+          required
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8FBC8B] focus:border-transparent"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        :disabled="loading"
+        class="bg-[#8FBC8B] text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50"
+      >
+        {{ loading ? 'Saving...' : 'Save Emergency Contact' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
     </div>
 
     <!-- Loading State -->

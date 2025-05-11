@@ -84,21 +84,21 @@ const sendMeasurements = () => {
   }
 }
 
-const recordSleep = () => {
-  if (sleepSectionRef.value) {
-    const sleepData = sleepSectionRef.value.generateSleepData()
-    notificationsSectionRef.value.addNotification({
-      type: 'info',
-      message: 'New sleep record received',
-      timestamp: 'Just now',
-      icon: '😴',
-      read: false,
-      details: `You slept for ${sleepData.duration} hours with ${sleepData.quality} quality sleep. Deep sleep: ${sleepData.deepSleep}, REM: ${sleepData.remSleep}.`,
-      action: 'View Sleep Analysis',
-      route: '/sleep'
-    })
-  }
-}
+// const recordSleep = () => {
+//   if (sleepSectionRef.value) {
+//     const sleepData = sleepSectionRef.value.generateSleepData()
+//     notificationsSectionRef.value.addNotification({
+//       type: 'info',
+//       message: 'New sleep record received',
+//       timestamp: 'Just now',
+//       icon: '😴',
+//       read: false,
+//       details: `You slept for ${sleepData.duration} hours with ${sleepData.quality} quality sleep. Deep sleep: ${sleepData.deepSleep}, REM: ${sleepData.remSleep}.`,
+//       action: 'View Sleep Analysis',
+//       route: '/sleep'
+//     })
+//   }
+// }
 
 const isMenuOpen = ref(false)
 
@@ -147,15 +147,7 @@ onMounted(() => {
           </span>
         </button>
 
-        <button
-          @click="recordSleep"
-          class="relative group bg-[#8FBC8B] text-white p-4 rounded-full shadow-lg hover:scale-105 transition-all duration-300"
-        >
-          😴
-          <span class="absolute right-14 top-1/2 -translate-y-1/2 text-sm bg-gray-800 text-white px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity duration-300">
-            Record Sleep
-          </span>
-        </button>
+
       </div>
 
       <!-- Notification -->
