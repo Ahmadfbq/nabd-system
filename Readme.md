@@ -2,16 +2,37 @@
 
 <div align="center">
 
-![Nabd Logo](https://img.shields.io/badge/Nabd-1.0-red?style=for-the-badge&logo=heart&logoColor=white)
+<img src="https://img.shields.io/badge/Nabd-1.0-red?style=for-the-badge&logo=heart&logoColor=white" alt="Nabd Logo" height="40" />
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
-[![React](https://img.shields.io/badge/React-19.x-blue.svg)](https://reactjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-blue.svg)](https://tailwindcss.com)
-[![Shadcn/ui](https://img.shields.io/badge/Shadcn/ui-1.0-blue.svg)](https://ui.shadcn.com)
+<br/><br/>
 
-*Where every heartbeat matters - Real-time health monitoring redefined*
+<a href="LICENSE">
+   <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License" />
+</a>
+<a href="https://laravel.com">
+   <img src="https://img.shields.io/badge/Laravel-12.x-ff2d20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+</a>
+<a href="https://reactjs.org">
+   <img src="https://img.shields.io/badge/React-19.x-61dafb?style=for-the-badge&logo=react&logoColor=white" alt="React" />
+</a>
+<a href="https://www.typescriptlang.org">
+   <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+</a>
+<a href="https://tailwindcss.com">
+   <img src="https://img.shields.io/badge/Tailwind%20CSS-4.0-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+</a>
+<a href="https://ui.shadcn.com">
+   <img src="https://img.shields.io/badge/Shadcn/ui-1.0-6366f1?style=for-the-badge" alt="Shadcn/ui" />
+</a>
+
+<br/><br/>
+
+<h3>
+   <span style="color:#F53003;">❤️</span>
+   <strong>Where every heartbeat matters</strong>
+   <span style="color:#22C55E;">•</span>
+   <em>Real-time health monitoring redefined</em>
+</h3>
 
 </div>
 
@@ -298,7 +319,7 @@ Nabd's interface embodies the perfect harmony between medical precision and huma
 - **Backend**: Laravel 12 + PHP 8.2
 - **Database**: SQLite (lightweight and efficient)
 - **Styling**: Tailwind CSS 4.0 + Shadcn/ui
-- **Real-time**: Laravel Echo + WebSockets
+- **Real-time**: Laravel Echo (Reverb) + WebSockets
 - **Testing**: Pest PHP + React Testing Library
 
 ### 🏛️ **Monolithic Architecture**
@@ -370,8 +391,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 *Nabd - Because every heartbeat tells a story*
 
-[![Follow on X](https://img.shields.io/badge/X-Follow-blue)](https://x.com/ahmad_fbq)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-blue)](https://github.com/Ahmadfbq)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/ahmadfbq)
+[![Follow on X](https://img.shields.io/badge/X-Follow-1da1f2?logo=x&logoColor=white&style=for-the-badge)](https://x.com/ahmad_fbq)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?logo=github&logoColor=white&style=for-the-badge)](https://github.com/Ahmadfbq)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077b5?logo=linkedin&logoColor=white&style=for-the-badge)](https://www.linkedin.com/in/ahmadfbq)
 
 </div>
