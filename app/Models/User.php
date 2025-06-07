@@ -45,4 +45,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Just defining the relationship here نوط زات إيمبورطانط
+    public function healthProfile()
+    {
+        return $this->hasOne(HealthProfile::class);
+    }
+
+    public function measurements()
+    {
+        return $this->hasMany(Measurement::class);
+    }
+
+    public function alerts()
+    {
+        return $this->hasMany(Alert::class);
+    }
+
+    public function latestMeasurement()
+    {
+        return $this->hasOne(Measurement::class)->latestOfMany();
+    }
 }
