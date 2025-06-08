@@ -3,9 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Measurement extends Model
 {
+    /** @use HasFactory<\Database\Factories\MeasurementFactory> */
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'heart_rate',
@@ -17,6 +26,11 @@ class Measurement extends Model
         'recorded_at',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
