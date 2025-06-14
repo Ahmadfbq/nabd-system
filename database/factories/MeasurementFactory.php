@@ -18,7 +18,12 @@ class MeasurementFactory extends Factory
     public function definition(): array
     {
         $measurementType = fake()->randomElement([
-            'heart_rate', 'spo2', 'bp_systolic', 'bp_diastolic', 'glucose', 'temperature'
+            'heart_rate', 
+            'spo2', 
+            'bp_systolic', 
+            'bp_diastolic', 
+            'glucose', 
+            'temperature'
         ]);
 
         $data = [
@@ -35,11 +40,12 @@ class MeasurementFactory extends Factory
         match($measurementType) {
             'heart_rate' => $data['heart_rate'] = fake()->numberBetween(60, 120),
             'spo2' => $data['spo2'] = fake()->numberBetween(90, 100),
-            'bp_systolic' => $data['bp_systolic'] = fake()->numberBetween(90, int2: 160),
+            'bp_systolic' => $data['bp_systolic'] = fake()->numberBetween(90, 160),
             'bp_diastolic' => $data['bp_diastolic'] = fake()->numberBetween(60, 100),
             'glucose' => $data['glucose'] = fake()->randomFloat(2, 70, 200),
             'temperature' => $data['temperature'] = fake()->randomFloat(2, 35.0, 40.0),
         };
+
         return $data;
     }
 }

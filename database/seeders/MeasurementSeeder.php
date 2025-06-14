@@ -13,11 +13,9 @@ class MeasurementSeeder extends Seeder
      */
     public function run(): void
     {
-        Measurement::factory(50)
-            ->create([
-                'user_id' => 1, // Assuming user with ID 1 exists
-            ]);
-        // Or you can loop through users and create measurements for each
+        Measurement::factory(50)->create(['user_id' => 1]); // Assuming user with ID 1 exists
+        
+        // Or you can loop through users and create measurements for each user
         // foreach (User::all() as $user) {
         //     Measurement::factory(10)
         //         ->create(['user_id' => $user->id]);
